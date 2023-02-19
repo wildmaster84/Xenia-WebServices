@@ -8,7 +8,7 @@
 2. Create a `.env` file in the project root, following this structure:
 
 ```env
-  API_PORT=8080
+  API_PORT=36000
   MONGO_URI=
 ```
 
