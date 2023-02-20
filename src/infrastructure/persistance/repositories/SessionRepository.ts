@@ -34,8 +34,8 @@ export default class SessionRepository implements ISessionRepository {
     );
   }
 
-  public async findSession(id: SessionId, titleId: TitleId) {
-    const session = await this.SessionModel.findById({
+  public async findSession(titleId: TitleId, id: SessionId) {
+    const session = await this.SessionModel.findOne({
       id: id.value,
       titleId: titleId.toString(),
     });
