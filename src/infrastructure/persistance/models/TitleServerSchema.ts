@@ -8,12 +8,12 @@ export class TitleServer {
   @Prop({ required: true, unique: true })
   id: string;
   @Prop({ required: true })
-  TitleId: string;
+  titleId: string;
   @Prop({ required: true })
   address: string;
   @Prop({ required: true })
   flags: number;
-  @Prop({ required: true, default: 9 })
+  @Prop({ required: true })
   description: string;
 }
 

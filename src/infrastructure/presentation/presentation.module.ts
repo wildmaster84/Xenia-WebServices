@@ -17,7 +17,7 @@ import TitleServerPresentationMapper from './mappers/TitleServerPresentationMapp
     TitleController,
   ],
   providers: [
-    TitleServerPresentationMapper
+    TitleServerPresentationMapper,
   ],
 })
 export class PresentationModule implements NestModule {

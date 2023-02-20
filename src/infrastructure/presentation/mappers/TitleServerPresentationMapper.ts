@@ -9,7 +9,7 @@ export default class TitleServerPresentationMapper {
 
   public mapToPresentationModel(titleServer: TitleServer): TitleServerDto {
     return {
-      address: titleServer.address,
+      address: titleServer.address.value,
       flags: titleServer.flags,
       description: titleServer.description,
     };

@@ -7,8 +7,8 @@ export default class TitleServerPersistanceMapper {
   public mapToDataModel(titleServer: TitleServer): TitleServerModel {
     return {
       id: titleServer.id.value,
-      TitleId: titleServer.TitleId.toString(),
-      address: titleServer.address,
+      titleId: titleServer.titleId.toString(),
+      address: titleServer.address.value,
       flags: titleServer.flags,
       description: titleServer.description,
     };

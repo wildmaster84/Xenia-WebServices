@@ -20,8 +20,10 @@ export default class TitleServerRepository implements ITitleServerRepository {
   ) {}
 
   public async findTitleServers(id: TitleId) {
-    const titleServers = await this.TitleServerModel.find({ titleId: id.toString() });
-     
-    return titleServers.map(this.titleServerDomainMapper.mapToDomainModel)
+    const titleServers = await this.TitleServerModel.find({
+      titleId: id.toString(),
+    });
+
+    return titleServers.map(this.titleServerDomainMapper.mapToDomainModel);
   }
 }

@@ -4,6 +4,7 @@ import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { Inject, Injectable } from '@nestjs/common';
 import TitleId from 'src/domain/value-objects/TitleId';
 import Uuid from 'src/domain/value-objects/Uuid';
+import IpAddress from 'src/domain/value-objects/IpAddress';
 
 @Injectable()
 export default class TitleServerDomainMapper {
@@ -12,8 +13,8 @@ export default class TitleServerDomainMapper {
   public mapToDomainModel(titleServer: TitleServerModel): TitleServer {
     return new TitleServer({
       id: Uuid.create(titleServer.id),
-      TitleId: new TitleId(titleServer.TitleId),
-      address: titleServer.address,
+      titleId: new TitleId(titleServer.titleId),
+      address: new IpAddress(titleServer.address),
       flags: titleServer.flags,
       description: titleServer.description,
     });
