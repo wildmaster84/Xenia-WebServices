@@ -1,8 +1,8 @@
 import IpAddress from 'src/domain/value-objects/IpAddress';
+import MacAddress from 'src/domain/value-objects/MacAddress';
 import SessionFlags from 'src/domain/value-objects/SessionFlags';
 import SessionId from 'src/domain/value-objects/SessionId';
 import TitleId from 'src/domain/value-objects/TitleId';
-import Xuid from 'src/domain/value-objects/Xuid';
 
 export class CreateSessionCommand {
   constructor(
@@ -13,5 +13,6 @@ export class CreateSessionCommand {
     public readonly publicSlotsCount: number,
     public readonly privateSlotsCount: number,
     public readonly userIndex: number,
+    public readonly macAddress: MacAddress,
   ) {}
 }

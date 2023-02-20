@@ -5,4 +5,5 @@ export interface SessionRequest {
   privateSlotsCount: number;
   userIndex: number;
   hostAddress: string;
+  macAddress: string;
 }

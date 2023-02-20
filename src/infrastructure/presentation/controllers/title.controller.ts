@@ -5,7 +5,6 @@ import {
   Inject,
   NotFoundException,
   Param,
-  Res,
 } from '@nestjs/common';
 import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -20,9 +19,9 @@ import SessionId from 'src/domain/value-objects/SessionId';
 import IpAddress from 'src/domain/value-objects/IpAddress';
 import SessionFlags from 'src/domain/value-objects/SessionFlags';
 import { GetSessionQuery } from 'src/application/queries/GetSessionQuery';
-import { NotFoundError } from 'rxjs';
 import { SessionSearchQuery } from 'src/application/queries/SessionSearchQuery';
 import SessionPresentationMapper from '../mappers/SessionPresentationMapper';
+import MacAddress from 'src/domain/value-objects/MacAddress';
 
 @ApiTags('Title')
 @Controller('/title/:titleId')
@@ -62,6 +61,7 @@ export class TitleController {
           request.publicSlotsCount,
           request.privateSlotsCount,
           request.userIndex,
+          new MacAddress(request.macAddress),
         ),
       );
     } else {

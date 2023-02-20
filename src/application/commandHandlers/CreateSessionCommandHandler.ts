@@ -23,6 +23,7 @@ export class CreateSessionCommandHandler
         publicSlotsCount: command.publicSlotsCount,
         privateSlotsCount: command.privateSlotsCount,
         userIndex: command.userIndex,
+        macAddress: command.macAddress,
       }),
     );
   }

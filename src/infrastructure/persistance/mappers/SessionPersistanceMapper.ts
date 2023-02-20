@@ -14,6 +14,7 @@ export default class SessionPersistanceMapper {
       privateSlotsCount: session.privateSlotsCount,
       userIndex: session.userIndex,
       advertised: session.flags.advertised,
+      macAddress: session.macAddress.value,
     };
   }
 }

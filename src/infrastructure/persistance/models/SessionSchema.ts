@@ -12,6 +12,8 @@ export class Session {
   @Prop({ required: true })
   hostAddress: string;
   @Prop({ required: true })
+  macAddress: string;
+  @Prop({ required: true })
   flags: number;
   @Prop({ required: true })
   advertised: boolean;

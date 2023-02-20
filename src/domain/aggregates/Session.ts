@@ -1,4 +1,5 @@
 import IpAddress from '../value-objects/IpAddress';
+import MacAddress from '../value-objects/MacAddress';
 import SessionFlags from '../value-objects/SessionFlags';
 import SessionId from '../value-objects/SessionId';
 import TitleId from '../value-objects/TitleId';
@@ -8,6 +9,7 @@ interface SessionProps {
   titleId: TitleId;
   flags: SessionFlags;
   hostAddress: IpAddress;
+  macAddress: MacAddress;
   publicSlotsCount: number;
   privateSlotsCount: number;
   userIndex: number;
@@ -46,5 +48,9 @@ export default class Session {
 
   get userIndex() {
     return this.props.userIndex;
+  }
+
+  get macAddress() {
+    return this.props.macAddress;
   }
 }
