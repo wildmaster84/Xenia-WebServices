@@ -22,6 +22,7 @@ export default class SessionDomainMapper {
       publicSlotsCount: session.publicSlotsCount,
       privateSlotsCount: session.privateSlotsCount,
       userIndex: session.userIndex,
+      port: session.port,
     });
   }
 }

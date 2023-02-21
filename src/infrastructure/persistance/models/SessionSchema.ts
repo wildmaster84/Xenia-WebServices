@@ -23,6 +23,8 @@ export class Session {
   privateSlotsCount: number;
   @Prop({ required: true })
   userIndex: number;
+  @Prop({ required: true })
+  port: number;
 }
 
 export const SessionSchema = SchemaFactory.createForClass(Session);

@@ -6,7 +6,6 @@ import { TitleServer as TitleServerModel } from '../models/TitleServerSchema';
 export default class TitleServerPersistanceMapper {
   public mapToDataModel(titleServer: TitleServer): TitleServerModel {
     return {
-      id: titleServer.id.value,
       titleId: titleServer.titleId.toString(),
       address: titleServer.address.value,
       flags: titleServer.flags,

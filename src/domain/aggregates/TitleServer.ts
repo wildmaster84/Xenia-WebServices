@@ -3,7 +3,6 @@ import TitleId from '../value-objects/TitleId';
 import Uuid from '../value-objects/Uuid';
 
 interface TitleServerProps {
-  id: Uuid;
   titleId: TitleId;
   address: IpAddress;
   flags: number;
@@ -15,10 +14,6 @@ export default class TitleServer {
 
   public constructor(props: TitleServerProps) {
     this.props = Object.freeze(props);
-  }
-
-  get id() {
-    return this.props.id;
   }
 
   get titleId() {
@@ -35,9 +30,5 @@ export default class TitleServer {
 
   get description() {
     return this.props.description;
-  }
-
-  public static create(props: Omit<TitleServerProps, 'id'>): TitleServer {
-    return new TitleServer({ ...props, id: Uuid.create() });
   }
 }

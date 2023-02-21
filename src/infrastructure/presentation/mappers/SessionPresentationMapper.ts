@@ -16,6 +16,7 @@ export default class SessionPresentationMapper {
       publicSlotsCount: session.publicSlotsCount,
       privateSlotsCount: session.privateSlotsCount,
       userIndex: session.userIndex,
+      port: session.port,
     };
   }
 }

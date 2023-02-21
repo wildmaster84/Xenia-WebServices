@@ -15,6 +15,7 @@ export default class SessionPersistanceMapper {
       userIndex: session.userIndex,
       advertised: session.flags.advertised,
       macAddress: session.macAddress.value,
+      port: session.port,
     };
   }
 }

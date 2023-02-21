@@ -6,4 +6,5 @@ export interface SessionRequest {
   userIndex: number;
   hostAddress: string;
   macAddress: string;
+  port: number;
 }

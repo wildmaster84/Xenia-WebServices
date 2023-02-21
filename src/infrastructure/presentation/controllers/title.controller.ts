@@ -62,6 +62,7 @@ export class TitleController {
           request.privateSlotsCount,
           request.userIndex,
           new MacAddress(request.macAddress),
+          request.port,
         ),
       );
     } else {

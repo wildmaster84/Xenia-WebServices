@@ -13,6 +13,7 @@ interface SessionProps {
   publicSlotsCount: number;
   privateSlotsCount: number;
   userIndex: number;
+  port: number;
 }
 
 export default class Session {
@@ -52,5 +53,9 @@ export default class Session {
 
   get macAddress() {
     return this.props.macAddress;
+  }
+
+  get port() {
+    return this.props.port;
   }
 }

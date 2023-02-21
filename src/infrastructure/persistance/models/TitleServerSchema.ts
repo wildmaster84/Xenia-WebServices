@@ -5,8 +5,6 @@ export type TitleServerDocument = TitleServer & Document;
 
 @Schema()
 export class TitleServer {
-  @Prop({ required: true, unique: true })
-  id: string;
   @Prop({ required: true })
   titleId: string;
   @Prop({ required: true })
@@ -18,3 +16,6 @@ export class TitleServer {
 }
 
 export const TitleServerSchema = SchemaFactory.createForClass(TitleServer);
+
+TitleServerSchema.index({ titleId: 1, address: 1 }, { unique: true });
+

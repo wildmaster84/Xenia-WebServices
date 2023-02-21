@@ -24,6 +24,7 @@ export class CreateSessionCommandHandler
         privateSlotsCount: command.privateSlotsCount,
         userIndex: command.userIndex,
         macAddress: command.macAddress,
+        port: command.port,
       }),
     );
   }
