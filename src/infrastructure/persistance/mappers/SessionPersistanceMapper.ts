@@ -16,7 +16,7 @@ export default class SessionPersistanceMapper {
       advertised: session.flags.advertised,
       macAddress: session.macAddress.value,
       port: session.port,
-      players: session.players.map((xuid) => xuid.toString()),
+      players: session.players.map((xuid) => xuid.value),
     };
   }
 }
