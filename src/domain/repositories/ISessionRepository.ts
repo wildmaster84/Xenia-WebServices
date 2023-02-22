@@ -4,7 +4,7 @@ import TitleId from '../value-objects/TitleId';
 
 export default interface ISessionRepository {
   findAdvertisedSessions: (titleId: TitleId) => Promise<Session[]>;
-  findSession: (titleId: TitleId, id: SessionId) => Promise<Session>;
+  findSession: (titleId: TitleId, id: SessionId) => Promise<Session | undefined>;
   save: (session: Session) => Promise<void>;
 }
 

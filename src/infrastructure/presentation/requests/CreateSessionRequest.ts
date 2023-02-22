@@ -1,4 +1,4 @@
-export interface SessionRequest {
+export interface CreateSessionRequest {
   sessionId: string;
   flags: number;
   publicSlotsCount: number;

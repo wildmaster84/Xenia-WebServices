@@ -5,6 +5,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import TitleServerPresentationMapper from './mappers/TitleServerPresentationMapper';
 import SessionPresentationMapper from './mappers/SessionPresentationMapper';
 import { XNetController } from './controllers/xnet.controller';
+import { SessionController } from './controllers/session.controller';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { XNetController } from './controllers/xnet.controller';
   controllers: [
     TitleController,
     XNetController,
+    SessionController,
   ],
   providers: [
     TitleServerPresentationMapper,

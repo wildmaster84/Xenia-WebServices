@@ -16,11 +16,23 @@ interface SessionProps {
   port: number;
 }
 
+interface ModifyProps {
+  flags: SessionFlags;
+  publicSlotsCount: number;
+  privateSlotsCount: number;
+}
+
 export default class Session {
   private readonly props: SessionProps;
 
   public constructor(props: SessionProps) {
-    this.props = Object.freeze(props);
+    this.props = props;
+  }
+
+  public modify(props: ModifyProps) {
+    this.props.flags = this.flags.modify(props.flags);
+    this.props.privateSlotsCount = props.privateSlotsCount;
+    this.props.publicSlotsCount = props.publicSlotsCount;
   }
 
   get id() {

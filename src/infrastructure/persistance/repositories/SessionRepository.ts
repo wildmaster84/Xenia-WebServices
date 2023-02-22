@@ -40,6 +40,8 @@ export default class SessionRepository implements ISessionRepository {
       titleId: titleId.toString(),
     });
 
+    if (!session) return undefined;
+
     return this.sessionDomainMapper.mapToDomainModel(session);
   }
 
