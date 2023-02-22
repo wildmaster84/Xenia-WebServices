@@ -23,6 +23,7 @@ export default class SessionDomainMapper {
       privateSlotsCount: session.privateSlotsCount,
       userIndex: session.userIndex,
       port: session.port,
+      players: session.players.map((xuid) => new Xuid(xuid)),
     });
   }
 }

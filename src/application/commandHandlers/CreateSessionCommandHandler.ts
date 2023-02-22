@@ -15,7 +15,7 @@ export class CreateSessionCommandHandler
 
   async execute(command: CreateSessionCommand) {
     return this.repository.save(
-      new Session({
+      Session.create({
         id: command.sessionId,
         titleId: command.title,
         flags: command.flags,

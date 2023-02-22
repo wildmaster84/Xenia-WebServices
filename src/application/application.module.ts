@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { PersistanceModule } from 'src/infrastructure/persistance/persistance.module';
 import { CreateSessionCommandHandler } from './commandHandlers/CreateSessionCommandHandler';
+import { JoinSessionCommandHandler } from './commandHandlers/JoinSessionCommandHandler';
 import { ModifySessionCommandHandler } from './commandHandlers/ModifySessionCommandHandler';
 import { GetSessionsQueryHandler } from './queryHandlers/GetSessionQueryHandler';
 import { GetTitleServersQueryHandler } from './queryHandlers/GetTitleServerQueryHandler';
@@ -16,6 +17,7 @@ export const queryHandlers = [
 export const commandHandlers = [
   CreateSessionCommandHandler,
   ModifySessionCommandHandler,
+  JoinSessionCommandHandler,
 ];
 
 @Module({

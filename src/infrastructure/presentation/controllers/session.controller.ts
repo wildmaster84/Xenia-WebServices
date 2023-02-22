@@ -22,6 +22,9 @@ import SessionPresentationMapper from '../mappers/SessionPresentationMapper';
 import MacAddress from 'src/domain/value-objects/MacAddress';
 import { ModifySessionCommand } from 'src/application/commands/ModifySessionCommand';
 import { ModifySessionRequest } from '../requests/ModifySessionRequest';
+import { JoinSessionCommand } from 'src/application/commands/JoinSessionCommand';
+import { JoinSessionRequest } from '../requests/JoinSessionRequest';
+import Xuid from 'src/domain/value-objects/Xuid';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -92,6 +95,23 @@ export class SessionController {
         new SessionFlags(request.flags),
         request.publicSlotsCount,
         request.privateSlotsCount,
+      ),
+    );
+  }
+
+  @Post('/:sessionId/join')
+  @ApiParam({ name: 'titleId', example: '4D5307E6' })
+  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  async joinSession(
+    @Param('titleId') titleId: string,
+    @Param('sessionId') sessionId: string,
+    @Body() request: JoinSessionRequest,
+  ) {
+    await this.commandBus.execute(
+      new JoinSessionCommand(
+        new TitleId(titleId),
+        new SessionId(sessionId),
+        request.xuids.map((xuid) => new Xuid(xuid)),
       ),
     );
   }
