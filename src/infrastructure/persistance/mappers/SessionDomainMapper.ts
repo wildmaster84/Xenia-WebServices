@@ -21,7 +21,6 @@ export default class SessionDomainMapper {
       macAddress: new MacAddress(session.macAddress),
       publicSlotsCount: session.publicSlotsCount,
       privateSlotsCount: session.privateSlotsCount,
-      userIndex: session.userIndex,
       port: session.port,
       players: session.players.map((xuid) => new Xuid(xuid)),
     });

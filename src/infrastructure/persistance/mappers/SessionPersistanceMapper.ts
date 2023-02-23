@@ -12,7 +12,6 @@ export default class SessionPersistanceMapper {
       flags: session.flags.value,
       publicSlotsCount: session.publicSlotsCount,
       privateSlotsCount: session.privateSlotsCount,
-      userIndex: session.userIndex,
       advertised: session.flags.advertised,
       macAddress: session.macAddress.value,
       port: session.port,

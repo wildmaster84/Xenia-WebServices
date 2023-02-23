@@ -15,7 +15,10 @@ export default class SessionPresentationMapper {
       macAddress: session.macAddress.value,
       publicSlotsCount: session.publicSlotsCount,
       privateSlotsCount: session.privateSlotsCount,
-      userIndex: session.userIndex,
+      openPublicSlotsCount: session.openPublicSlots,
+      openPrivateSlotsCount: session.openPrivateSlots,
+      filledPublicSlotsCount: session.filledPublicSlots,
+      filledPrivateSlotsCount: session.filledPrivateSlots,
       port: session.port,
     };
   }

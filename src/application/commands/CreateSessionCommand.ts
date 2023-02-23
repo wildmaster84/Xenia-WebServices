@@ -12,7 +12,6 @@ export class CreateSessionCommand {
     public readonly flags: SessionFlags,
     public readonly publicSlotsCount: number,
     public readonly privateSlotsCount: number,
-    public readonly userIndex: number,
     public readonly macAddress: MacAddress,
     public readonly port: number,
   ) {}

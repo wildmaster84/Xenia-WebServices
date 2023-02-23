@@ -45,11 +45,17 @@ export default class SessionRepository implements ISessionRepository {
     return this.sessionDomainMapper.mapToDomainModel(session);
   }
 
-  public async findAdvertisedSessions(titleId: TitleId) {
-    const sessions = await this.SessionModel.find({
-      advertised: true,
-      titleId: titleId.toString(),
-    });
+  public async findAdvertisedSessions(titleId: TitleId, resultsCount: number) {
+    const sessions = await this.SessionModel.find(
+      {
+        advertised: true,
+        titleId: titleId.toString(),
+      },
+      undefined,
+      {
+        limit: resultsCount,
+      },
+    );
 
     return sessions.map(this.sessionDomainMapper.mapToDomainModel);
   }

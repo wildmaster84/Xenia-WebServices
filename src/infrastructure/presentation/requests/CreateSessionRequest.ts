@@ -3,7 +3,6 @@ export interface CreateSessionRequest {
   flags: number;
   publicSlotsCount: number;
   privateSlotsCount: number;
-  userIndex: number;
   hostAddress: string;
   macAddress: string;
   port: number;

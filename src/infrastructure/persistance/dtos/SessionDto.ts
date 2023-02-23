@@ -6,5 +6,8 @@ export interface SessionDto {
   macAddress: string;
   publicSlotsCount: number;
   privateSlotsCount: number;
-  userIndex: number;
+  openPublicSlotsCount: number;
+  openPrivateSlotsCount: number;
+  filledPublicSlotsCount: number;
+  filledPrivateSlotsCount: number;
 }

@@ -13,7 +13,6 @@ interface SessionProps {
   macAddress: MacAddress;
   publicSlotsCount: number;
   privateSlotsCount: number;
-  userIndex: number;
   port: number;
   players: Xuid[];
 }
@@ -26,7 +25,6 @@ interface CreateProps {
   macAddress: MacAddress;
   publicSlotsCount: number;
   privateSlotsCount: number;
-  userIndex: number;
   port: number;
 }
 
@@ -88,8 +86,21 @@ export default class Session {
     return this.props.privateSlotsCount;
   }
 
-  get userIndex() {
-    return this.props.userIndex;
+  get openPublicSlots() {
+    return this.publicSlotsCount - this.players.length;
+  }
+
+  get openPrivateSlots() {
+    // TODO: Implement
+    return 0;
+  }
+
+  get filledPublicSlots() {
+    return this.publicSlotsCount - this.openPublicSlots;
+  }
+
+  get filledPrivateSlots() {
+    return this.privateSlotsCount - this.openPrivateSlots;
   }
 
   get macAddress() {

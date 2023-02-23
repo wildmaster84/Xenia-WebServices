@@ -25,6 +25,7 @@ import { ModifySessionRequest } from '../requests/ModifySessionRequest';
 import { JoinSessionCommand } from 'src/application/commands/JoinSessionCommand';
 import { JoinSessionRequest } from '../requests/JoinSessionRequest';
 import Xuid from 'src/domain/value-objects/Xuid';
+import { SessionSearchRequest } from '../requests/SessionSearchRequest';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -52,7 +53,6 @@ export class SessionController {
           new SessionFlags(request.flags),
           request.publicSlotsCount,
           request.privateSlotsCount,
-          request.userIndex,
           new MacAddress(request.macAddress),
           request.port,
         ),
@@ -116,11 +116,18 @@ export class SessionController {
     );
   }
 
-  @Get('/search')
+  @Post('/search')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  async sessionSearch(@Param('titleId') titleId: string) {
+  async sessionSearch(
+    @Param('titleId') titleId: string,
+    @Body() request: SessionSearchRequest,
+  ) {
     const sessions = await this.queryBus.execute(
-      new SessionSearchQuery(new TitleId(titleId)),
+      new SessionSearchQuery(
+        new TitleId(titleId),
+        request.searchIndex,
+        request.resultsCount,
+      ),
     );
 
     return sessions.map(this.sessionMapper.mapToPresentationModel);

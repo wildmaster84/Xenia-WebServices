@@ -13,6 +13,7 @@ export class SessionSearchQueryHandler
   ) {}
 
   async execute(query: SessionSearchQuery) {
-    return this.repository.findAdvertisedSessions(query.title);
+    console.log('Session Search ' + query.searchIndex);
+    return this.repository.findAdvertisedSessions(query.title, query.resultsCount);
   }
 }

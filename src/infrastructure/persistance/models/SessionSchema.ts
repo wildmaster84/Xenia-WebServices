@@ -22,8 +22,6 @@ export class Session {
   @Prop({ required: true })
   privateSlotsCount: number;
   @Prop({ required: true })
-  userIndex: number;
-  @Prop({ required: true })
   port: number;
   @Prop({ required: true })
   players: string[];
