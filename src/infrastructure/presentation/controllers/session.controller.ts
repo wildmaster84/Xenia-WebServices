@@ -26,6 +26,7 @@ import { JoinSessionCommand } from 'src/application/commands/JoinSessionCommand'
 import { JoinSessionRequest } from '../requests/JoinSessionRequest';
 import Xuid from 'src/domain/value-objects/Xuid';
 import { SessionSearchRequest } from '../requests/SessionSearchRequest';
+import { SessionDetailsResponse } from '../responses/SessionDetailsResponse';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -78,6 +79,39 @@ export class SessionController {
     }
 
     return this.sessionMapper.mapToPresentationModel(session);
+  }
+
+  @Get('/:sessionId/details')
+  @ApiParam({ name: 'titleId', example: '4D5307E6' })
+  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  async getSessionDetails(
+    @Param('titleId') titleId: string,
+    @Param('sessionId') sessionId: string,
+  ): Promise<SessionDetailsResponse> {
+    const session = await this.queryBus.execute(
+      new GetSessionQuery(new TitleId(titleId), new SessionId(sessionId)),
+    );
+
+    if (!session) {
+      throw new NotFoundException('Session not found.');
+    }
+
+    // TODO: I think there should be more in here but I haven't worked it out yet.
+    // Also, the host flag should probably be unset if requested by a peer.
+    return {
+      id: session.id.value,
+      flags: session.flags.value,
+      hostAddress: session.hostAddress.value,
+      port: session.port,
+      macAddress: session.macAddress.value,
+      publicSlotsCount: session.publicSlotsCount,
+      privateSlotsCount: session.privateSlotsCount,
+      openPublicSlotsCount: session.openPublicSlots,
+      openPrivateSlotsCount: session.openPrivateSlots,
+      filledPublicSlotsCount: session.filledPublicSlots,
+      filledPrivateSlotsCount: session.filledPrivateSlots,
+      players: session.players.map((xuid) => ({xuid: xuid.value})),
+    };
   }
 
   @Post('/:sessionId/modify')
