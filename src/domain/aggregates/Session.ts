@@ -15,6 +15,7 @@ interface SessionProps {
   privateSlotsCount: number;
   port: number;
   players: Xuid[];
+  deleted: boolean;
 }
 
 interface CreateProps {
@@ -38,6 +39,10 @@ interface JoinProps {
   xuids: Xuid[];
 }
 
+interface LeaveProps {
+  xuids: Xuid[];
+}
+
 export default class Session {
   private readonly props: SessionProps;
 
@@ -49,6 +54,7 @@ export default class Session {
     return new Session({
       ...props,
       players: [],
+      deleted: false,
     });
   }
 
@@ -60,6 +66,19 @@ export default class Session {
 
   public join(props: JoinProps) {
     this.props.players.push(...props.xuids);
+
+    const xuidValues = this.props.players.map((xuid) => xuid.value);
+    const distinctXuidValues = [...new Set(xuidValues)];
+    this.props.players = distinctXuidValues.map((xuid) => new Xuid(xuid));
+  }
+
+  public leave(props: LeaveProps) {
+    const xuidValues = props.xuids.map((xuid) => xuid.value);
+    this.props.players = this.props.players.filter((player) => xuidValues.includes(player.value));
+  }
+
+  public delete() {
+    this.props.deleted = true;
   }
 
   get id() {
@@ -110,8 +129,12 @@ export default class Session {
   get port() {
     return this.props.port;
   }
-  
+
   get players() {
     return this.props.players;
+  }
+
+  get deleted() {
+    return this.props.deleted;
   }
 }

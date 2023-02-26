@@ -6,6 +6,7 @@ import TitleServerPresentationMapper from './mappers/TitleServerPresentationMapp
 import SessionPresentationMapper from './mappers/SessionPresentationMapper';
 import { XNetController } from './controllers/xnet.controller';
 import { SessionController } from './controllers/session.controller';
+import { PlayerController } from './controllers/player.controller';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SessionController } from './controllers/session.controller';
     TitleController,
     XNetController,
     SessionController,
+    PlayerController,
   ],
   providers: [
     TitleServerPresentationMapper,

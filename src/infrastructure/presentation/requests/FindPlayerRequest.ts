@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class JoinSessionRequest {
+export class FindPlayerRequest {
   @ApiProperty()
-  xuids: string[];
+  hostAddress: string;
 }

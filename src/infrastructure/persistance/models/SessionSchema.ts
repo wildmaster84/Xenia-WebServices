@@ -25,6 +25,8 @@ export class Session {
   port: number;
   @Prop({ required: true })
   players: string[];
+  @Prop({ required: true, default: false })
+  deleted: boolean;
 }
 
 export const SessionSchema = SchemaFactory.createForClass(Session);

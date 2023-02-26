@@ -9,6 +9,7 @@ import SessionPersistanceMapper from '../mappers/SessionPersistanceMapper';
 import { SessionDocument } from '../models/SessionSchema';
 import TitleId from 'src/domain/value-objects/TitleId';
 import SessionId from 'src/domain/value-objects/SessionId';
+import Xuid from 'src/domain/value-objects/Xuid';
 
 @Injectable()
 export default class SessionRepository implements ISessionRepository {
@@ -45,10 +46,21 @@ export default class SessionRepository implements ISessionRepository {
     return this.sessionDomainMapper.mapToDomainModel(session);
   }
 
+  public async findByPlayer(xuid: Xuid) {
+    const session = await this.SessionModel.findOne({
+      players: xuid.value,
+    });
+
+    if (!session) return undefined;
+
+    return this.sessionDomainMapper.mapToDomainModel(session);
+  }
+
   public async findAdvertisedSessions(titleId: TitleId, resultsCount: number) {
     const sessions = await this.SessionModel.find(
       {
         advertised: true,
+        deleted: false,
         titleId: titleId.toString(),
       },
       undefined,

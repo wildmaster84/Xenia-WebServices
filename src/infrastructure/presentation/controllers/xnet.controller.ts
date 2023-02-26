@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Inject,
+  Post,
 } from '@nestjs/common';
 import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';

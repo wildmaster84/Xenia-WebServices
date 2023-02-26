@@ -11,6 +11,11 @@ import SessionRepository from './repositories/SessionRepository';
 import SessionPersistanceMapper from './mappers/SessionPersistanceMapper';
 import SessionDomainMapper from './mappers/SessionDomainMapper';
 import { Session, SessionSchema } from './models/SessionSchema';
+import { IPlayerRepositorySymbol } from 'src/domain/repositories/IPlayerRepository';
+import PlayerRepository from './repositories/PlayerRepository';
+import PlayerPersistanceMapper from './mappers/PlayerPersistanceMapper';
+import PlayerDomainMapper from './mappers/PlayerDomainMapper';
+import { Player, PlayerSchema } from './models/PlayerSchema';
 
 const persistanceSettings = new PersistanceSettings().get();
 
@@ -20,6 +25,7 @@ const persistanceSettings = new PersistanceSettings().get();
     MongooseModule.forFeature([
       { name: TitleServer.name, schema: TitleServerSchema },
       { name: Session.name, schema: SessionSchema },
+      { name: Player.name, schema: PlayerSchema },
     ]),
   ],
   providers: [
@@ -36,10 +42,18 @@ const persistanceSettings = new PersistanceSettings().get();
     },
     SessionPersistanceMapper,
     SessionDomainMapper,
+
+    {
+      provide: IPlayerRepositorySymbol,
+      useClass: PlayerRepository,
+    },
+    PlayerPersistanceMapper,
+    PlayerDomainMapper,
   ],
   exports: [
     ITitleServerRepositorySymbol,
     ISessionRepositorySymbol,
+    IPlayerRepositorySymbol,
   ],
 })
 export class PersistanceModule {}

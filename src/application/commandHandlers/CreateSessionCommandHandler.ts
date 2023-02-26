@@ -14,17 +14,19 @@ export class CreateSessionCommandHandler
   ) {}
 
   async execute(command: CreateSessionCommand) {
-    return this.repository.save(
-      Session.create({
-        id: command.sessionId,
-        titleId: command.title,
-        flags: command.flags,
-        hostAddress: command.hostAddress,
-        publicSlotsCount: command.publicSlotsCount,
-        privateSlotsCount: command.privateSlotsCount,
-        macAddress: command.macAddress,
-        port: command.port,
-      }),
-    );
+    const session = Session.create({
+      id: command.sessionId,
+      titleId: command.title,
+      flags: command.flags,
+      hostAddress: command.hostAddress,
+      publicSlotsCount: command.publicSlotsCount,
+      privateSlotsCount: command.privateSlotsCount,
+      macAddress: command.macAddress,
+      port: command.port,
+    });
+
+    await this.repository.save(session);
+
+    return session;
   }
 }

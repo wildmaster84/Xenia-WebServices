@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class JoinSessionRequest {
+export class LeaveSessionRequest {
   @ApiProperty()
   xuids: string[];
 }
