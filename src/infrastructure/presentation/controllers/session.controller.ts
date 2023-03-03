@@ -1,18 +1,20 @@
 import {
-  BadRequestException,
   Controller,
   Get,
   Delete,
   Inject,
   NotFoundException,
   Param,
-  Ip,
+  Put,
+  RawBodyRequest,
+  StreamableFile,
 } from '@nestjs/common';
+import * as rawbody from 'raw-body';
 import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import TitleId from 'src/domain/value-objects/TitleId';
-import { Body, Post } from '@nestjs/common/decorators';
+import { Body, Post, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
 import { CreateSessionRequest } from '../requests/CreateSessionRequest';
 import { CreateSessionCommand } from 'src/application/commands/CreateSessionCommand';
 import SessionId from 'src/domain/value-objects/SessionId';
@@ -37,8 +39,11 @@ import Player from 'src/domain/aggregates/Player';
 import { GetPlayerQuery } from 'src/application/queries/GetPlayerQuery';
 import { FindPlayerQuery } from 'src/application/queries/FindPlayerQuery';
 import { SetPlayerSessionIdCommand } from 'src/application/commands/SetPlayerSessionIdCommand';
-import axios from 'axios';
 import Session from 'src/domain/aggregates/Session';
+import { Request, Response } from 'express';
+import { mkdir, stat, writeFile } from 'fs/promises';
+import { join } from 'path';
+import { createReadStream, existsSync } from 'fs';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -179,7 +184,7 @@ export class SessionController {
     ));
 
     const machinePlayers = {};
-    players.forEach((player) => {
+    players.filter((player) => player != undefined).forEach((player) => {
       if (machinePlayers[player.machineId.value] != undefined)
         machinePlayers[player.machineId.value].push(player);
       else
@@ -271,5 +276,39 @@ export class SessionController {
     );
 
     return sessions.map(this.sessionMapper.mapToPresentationModel);
+  }
+
+  @Post('/:sessionId/qos')
+  @ApiParam({ name: 'titleId', example: '4D5307E6' })
+  @ApiParam({ name: 'sessionId', example: '4D5307E6' })
+  async qosUpload(
+    @Param('titleId') titleId: string,
+    @Param('sessionId') sessionId: string,
+    @Req() req: RawBodyRequest<Request>,
+  ) {
+    const qosPath = join(process.cwd(), 'qos', titleId, sessionId);
+
+    if (!existsSync(qosPath)) {
+      await mkdir(qosPath, { recursive: true });
+      await writeFile(qosPath, req.rawBody);
+    }
+  }
+
+  @Get('/:sessionId/qos')
+  @ApiParam({ name: 'titleId', example: '4D5307E6' })
+  @ApiParam({ name: 'sessionId', example: '4D5307E6' })
+  async qosDownload(
+    @Param('titleId') titleId: string,
+    @Param('sessionId') sessionId: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const path = join(process.cwd(), 'qos', titleId, sessionId);
+
+    const stats = await stat(path);
+
+    if (!stats.isFile()) throw new NotFoundException();
+
+    res.set('Content-Length', stats.size.toString());
+    return new StreamableFile(createReadStream(path));
   }
 }

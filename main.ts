@@ -5,7 +5,9 @@ import { XeniaModule } from './src/xenia.module';
 import PresentationSettings from 'src/infrastructure/presentation/settings/PresentationSettings';
 
 async function bootstrap() {
-  const app = await NestFactory.create(XeniaModule);
+  const app = await NestFactory.create(XeniaModule, {
+    rawBody: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Xenia Web API')

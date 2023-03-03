@@ -36,5 +36,4 @@ lerna-debug.log*
 
 .env
 
-/public/storage
-/uploads
+/qos

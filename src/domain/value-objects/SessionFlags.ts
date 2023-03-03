@@ -26,6 +26,7 @@ export default class SessionFlags extends TinyTypeOf<number>() {
 
 
   public get advertised(): boolean {
+    // return this.value == 61;
     return this.isFlagSet(3);
   }
 

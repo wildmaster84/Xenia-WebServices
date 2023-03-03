@@ -111,7 +111,7 @@ export default class Session {
 
   get openPrivateSlots() {
     // TODO: Implement
-    return 0;
+    return this.privateSlotsCount;
   }
 
   get filledPublicSlots() {
