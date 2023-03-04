@@ -27,6 +27,7 @@ import { FindPlayerSessionQuery } from 'src/application/queries/FindPlayerSessio
   just filling the gaps with something limited, inefficient and insecure. */
 
 @ApiTags('Player')
+@Controller('/players')
 @Controller()
 export class PlayerController {
   constructor(
@@ -35,7 +36,7 @@ export class PlayerController {
     private readonly commandBus: CommandBus,
   ) {}
 
-  @Post('/players')
+  @Post()
   async createPlayer(
     @Body() request: CreatePlayerRequest,
   ) {
@@ -49,7 +50,7 @@ export class PlayerController {
     );
   }
 
-  @Post('/players/find')
+  @Post('/find')
   async findPlayer(
     @Body() request: FindPlayerRequest,
   ) : Promise<PlayerResponse> {

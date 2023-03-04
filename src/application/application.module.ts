@@ -9,6 +9,7 @@ import { LeaveSessionCommandHandler } from './commandHandlers/LeaveSessionComman
 import { ModifySessionCommandHandler } from './commandHandlers/ModifySessionCommandHandler';
 import { SetPlayerSessionIdCommandHandler } from './commandHandlers/SetPlayerSessionIdCommandHandler';
 import { UpdateLeaderboardCommandHandler } from './commandHandlers/UpdateLeaderboardCommandHandler';
+import { FindLeaderboardsQueryHandler } from './queryHandlers/FindLeaderboardsQueryHandler';
 import { FindPlayerQueryHandler } from './queryHandlers/FindPlayerQueryHandler';
 import { FindPlayerSessionQueryHandler } from './queryHandlers/FindPlayerSessionQueryHandler';
 import { GetPlayerQueryHandler } from './queryHandlers/GetPlayerQueryHandler';
@@ -23,6 +24,7 @@ export const queryHandlers = [
   FindPlayerQueryHandler,
   FindPlayerSessionQueryHandler,
   GetPlayerQueryHandler,
+  FindLeaderboardsQueryHandler,
 ];
 
 export const commandHandlers = [
