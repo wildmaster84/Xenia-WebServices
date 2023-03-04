@@ -8,6 +8,7 @@ import { JoinSessionCommandHandler } from './commandHandlers/JoinSessionCommandH
 import { LeaveSessionCommandHandler } from './commandHandlers/LeaveSessionCommandHandler';
 import { ModifySessionCommandHandler } from './commandHandlers/ModifySessionCommandHandler';
 import { SetPlayerSessionIdCommandHandler } from './commandHandlers/SetPlayerSessionIdCommandHandler';
+import { UpdateLeaderboardCommandHandler } from './commandHandlers/UpdateLeaderboardCommandHandler';
 import { FindPlayerQueryHandler } from './queryHandlers/FindPlayerQueryHandler';
 import { FindPlayerSessionQueryHandler } from './queryHandlers/FindPlayerSessionQueryHandler';
 import { GetPlayerQueryHandler } from './queryHandlers/GetPlayerQueryHandler';
@@ -32,6 +33,7 @@ export const commandHandlers = [
   CreatePlayerCommandHandler,
   DeleteSessionCommandHandler,
   SetPlayerSessionIdCommandHandler,
+  UpdateLeaderboardCommandHandler,
 ];
 
 @Module({

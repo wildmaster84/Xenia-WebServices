@@ -44,6 +44,9 @@ import { Request, Response } from 'express';
 import { mkdir, stat, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { createReadStream, existsSync } from 'fs';
+import { UpdateLeaderboardCommand } from 'src/application/commands/UpdateLeaderboardCommand';
+import LeaderboardId from 'src/domain/value-objects/LeaderboardId';
+import { WriteStatsRequest } from '../requests/WriteStatsRequest';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -280,7 +283,7 @@ export class SessionController {
 
   @Post('/:sessionId/qos')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: '4D5307E6' })
+  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
   async qosUpload(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -289,14 +292,14 @@ export class SessionController {
     const qosPath = join(process.cwd(), 'qos', titleId, sessionId);
 
     if (!existsSync(qosPath)) {
-      await mkdir(qosPath, { recursive: true });
+      await mkdir(join(process.cwd(), 'qos', titleId), { recursive: true });
       await writeFile(qosPath, req.rawBody);
     }
   }
 
   @Get('/:sessionId/qos')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: '4D5307E6' })
+  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
   async qosDownload(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -310,5 +313,29 @@ export class SessionController {
 
     res.set('Content-Length', stats.size.toString());
     return new StreamableFile(createReadStream(path));
+  }
+
+  @Post('/:sessionId/leaderboards')
+  @ApiParam({ name: 'titleId', example: '4D5307E6' })
+  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  async postLeaderboards(
+    @Param('titleId') titleId: string,
+    @Param('sessionId') sessionId: string,
+    @Body() request: WriteStatsRequest,
+  ) {
+    await Promise.all(
+      Object.entries(request.leaderboards).map(
+        async ([leaderboardId, leaderboard]) => {
+          return await this.commandBus.execute(
+            new UpdateLeaderboardCommand(
+              new LeaderboardId(leaderboardId),
+              new TitleId(titleId),
+              new Xuid(request.xuid),
+              leaderboard.stats,
+            ),
+          );
+        },
+      ),
+    );
   }
 }
