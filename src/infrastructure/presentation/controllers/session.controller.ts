@@ -8,6 +8,7 @@ import {
   Put,
   RawBodyRequest,
   StreamableFile,
+  Ip,
 } from '@nestjs/common';
 import * as rawbody from 'raw-body';
 import ILogger, { ILoggerSymbol } from '../../../ILogger';
@@ -50,6 +51,8 @@ import { WriteStatsRequest } from '../requests/WriteStatsRequest';
 import LeaderboardStatId from 'src/domain/value-objects/LeaderboardStatId';
 import PropertyId from 'src/domain/value-objects/PropertyId';
 import Leaderboard from 'src/domain/aggregates/Leaderboard';
+import { FindPlayerSessionQuery } from 'src/application/queries/FindPlayerSessionQuery';
+import axios from 'axios';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -125,7 +128,23 @@ export class SessionController {
   async deleteSession(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
+    @Ip() ip: string
   ) {
+    const session = await this.queryBus.execute(
+      new GetSessionQuery(new TitleId(titleId), new SessionId(sessionId)),
+    );
+
+    const splitIp = ip.split(':');
+    let ipv4 = splitIp[splitIp.length - 1];
+
+    if (ipv4 == "127.0.0.1" || ipv4.startsWith("192.168")) {
+      // Hi me! Who are you?
+      const res = await axios.get("https://api.ipify.org/");
+      ipv4 = res.data;
+    }
+
+    if (session == undefined || session.hostAddress !== ipv4) return;
+
     await this.commandBus.execute(
       new DeleteSessionCommand(new TitleId(titleId), new SessionId(sessionId)),
     );
@@ -310,6 +329,11 @@ export class SessionController {
   ) {
     const path = join(process.cwd(), 'qos', titleId, sessionId);
 
+    if (!existsSync(path)) {
+      res.set('Content-Length', '0');
+      return;
+    }
+
     const stats = await stat(path);
 
     if (!stats.isFile()) throw new NotFoundException();
@@ -354,15 +378,15 @@ export class SessionController {
         async ([leaderboardId, leaderboard]) => {
           const stats: Leaderboard['stats'] = {};
           Object.entries(leaderboard.stats).forEach(([propId, stat]) => {
-            const propIdString =
+            const propertyMapping =
               propertyMappings[new PropertyId(propId).toString()];
 
-            if (!(propIdString in propertyMappings)) {
+            if (propertyMapping == undefined) {
               console.warn('UNKNOWN STAT ID FOR PROPERTY ' + propId);
               return;
             }
 
-            const statId = propertyMappings[propIdString].statId;
+            const statId = propertyMapping.statId;
             stats[`${statId}`] = stat;
           });
 

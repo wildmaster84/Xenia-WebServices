@@ -1,17 +1,25 @@
-interface WriteStatsRequestLeaderboardStatistic {
-  type: number,
-  value: number,
+import { ApiProperty } from "@nestjs/swagger";
+
+class WriteStatsRequestLeaderboardStatistic {
+  @ApiProperty()
+  type: number;
+  @ApiProperty()
+  value: number;
 }
 
-interface WriteStatsRequestLeaderboard {
+class WriteStatsRequestLeaderboard {
+  @ApiProperty()
   stats: {
     [propertyId: string]: WriteStatsRequestLeaderboardStatistic
   }
 }
 
-export interface WriteStatsRequest {
+export class WriteStatsRequest {
+  @ApiProperty()
   xuid: string;
+  @ApiProperty()
   leaderboards: {
     [leaderboardId: string]: WriteStatsRequestLeaderboard
   }
 }
+

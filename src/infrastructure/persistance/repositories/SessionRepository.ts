@@ -27,7 +27,7 @@ export default class SessionRepository implements ISessionRepository {
         id: session.id.value,
         titleId: session.titleId.toString(),
       },
-      this.sessionPersistanceMapper.mapToDataModel(session),
+      this.sessionPersistanceMapper.mapToDataModel(session, new Date()),
       {
         upsert: true,
         new: true,

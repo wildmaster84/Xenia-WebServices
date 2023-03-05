@@ -4,7 +4,7 @@ import { Session as SessionModel } from '../models/SessionSchema';
 
 @Injectable()
 export default class SessionPersistanceMapper {
-  public mapToDataModel(session: Session): SessionModel {
+  public mapToDataModel(session: Session, updatedAt: Date): SessionModel {
     return {
       id: session.id.value,
       titleId: session.titleId.toString(),
@@ -17,6 +17,7 @@ export default class SessionPersistanceMapper {
       port: session.port,
       players: session.players.map((xuid) => xuid.value),
       deleted: session.deleted,
+      updatedAt,
     };
   }
 }

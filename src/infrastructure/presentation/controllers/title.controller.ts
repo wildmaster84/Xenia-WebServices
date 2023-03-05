@@ -14,7 +14,7 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { join } from 'path';
 import { Response } from 'express';
 import { stat } from 'fs/promises';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 
 @ApiTags('Title')
 @Controller('/title/:titleId')
@@ -39,9 +39,9 @@ export class TitleController {
       'servers.json',
     );
 
-    const stats = await stat(path);
+    if (!existsSync(path)) return [];
 
-    if (!stats.isFile()) throw new NotFoundException();
+    const stats = await stat(path);
 
     res.set('Content-Length', stats.size.toString());
     return new StreamableFile(createReadStream(path));
@@ -61,9 +61,9 @@ export class TitleController {
       'ports.json',
     );
 
-    const stats = await stat(path);
+    if (!existsSync(path)) return {};
 
-    if (!stats.isFile()) throw new NotFoundException();
+    const stats = await stat(path);
 
     res.set('Content-Length', stats.size.toString());
     return new StreamableFile(createReadStream(path));

@@ -27,6 +27,9 @@ export class Session {
   players: string[];
   @Prop({ required: true, default: false })
   deleted: boolean;
+
+  @Prop({ type: Date, expires: 60 * 60, required: true })
+  updatedAt: Date;
 }
 
 export const SessionSchema = SchemaFactory.createForClass(Session);

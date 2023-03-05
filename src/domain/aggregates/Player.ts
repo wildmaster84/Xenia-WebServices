@@ -29,7 +29,7 @@ export default class Player {
   public static create(props: CreateProps) {
     return new Player({
       ...props,
-      port: 36020,
+      port: 36000,
     });
   }
 
