@@ -6,6 +6,6 @@ export default class PropertyId extends TinyTypeOf<number>() {
   }
 
   public toString(): string {
-    return this.value.toString(16).toUpperCase();
+    return `0x${this.value.toString(16).toUpperCase()}`;
   }
 }

@@ -1,11 +1,6 @@
 import { Module } from '@nestjs/common';
 import PersistanceSettings from './settings/PersistanceSettings';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TitleServer, TitleServerSchema } from './models/TitleServerSchema';
-import { ITitleServerRepositorySymbol } from 'src/domain/repositories/ITitleServerRepository';
-import TitleServerRepository from './repositories/TitleServerRepository';
-import TitleServerPersistanceMapper from './mappers/TitleServerPersistanceMapper';
-import TitleServerDomainMapper from './mappers/TitleServerDomainMapper';
 import { ILeaderboardRepositorySymbol } from 'src/domain/repositories/ILeaderboardRepository';
 import LeaderboardRepository from './repositories/LeaderboardRepository';
 import LeaderboardPersistanceMapper from './mappers/LeaderboardPersistanceMapper';
@@ -28,20 +23,12 @@ const persistanceSettings = new PersistanceSettings().get();
   imports: [
     MongooseModule.forRoot(persistanceSettings.mongoURI),
     MongooseModule.forFeature([
-      { name: TitleServer.name, schema: TitleServerSchema },
       { name: Session.name, schema: SessionSchema },
       { name: Leaderboard.name, schema: LeaderboardSchema },
       { name: Player.name, schema: PlayerSchema },
     ]),
   ],
   providers: [
-    {
-      provide: ITitleServerRepositorySymbol,
-      useClass: TitleServerRepository,
-    },
-    TitleServerPersistanceMapper,
-    TitleServerDomainMapper,
-
     {
       provide: ISessionRepositorySymbol,
       useClass: SessionRepository,
@@ -64,7 +51,6 @@ const persistanceSettings = new PersistanceSettings().get();
     PlayerDomainMapper,
   ],
   exports: [
-    ITitleServerRepositorySymbol,
     ISessionRepositorySymbol,
     ILeaderboardRepositorySymbol,
     IPlayerRepositorySymbol,

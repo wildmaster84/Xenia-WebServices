@@ -43,7 +43,7 @@ import Session from 'src/domain/aggregates/Session';
 import { Request, Response } from 'express';
 import { mkdir, stat, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { createReadStream, existsSync } from 'fs';
+import { createReadStream, existsSync, readFileSync } from 'fs';
 import { UpdateLeaderboardCommand } from 'src/application/commands/UpdateLeaderboardCommand';
 import LeaderboardId from 'src/domain/value-objects/LeaderboardId';
 import { WriteStatsRequest } from '../requests/WriteStatsRequest';
@@ -326,19 +326,44 @@ export class SessionController {
     @Param('sessionId') sessionId: string,
     @Body() request: WriteStatsRequest,
   ) {
-    console.log("Here's the fucking request then")
     console.log({request: JSON.stringify(request)})
+
+    const statsConfigPath = join(
+      process.cwd(),
+      'titles',
+      titleId.toUpperCase(),
+      'stats.json',
+    );
+
+    // lol
+    const statsConfigStats = await stat(statsConfigPath);
+
+    if (!statsConfigStats.isFile()) {
+      console.warn(
+        `No stats config found for title ${titleId}, unable to save stats.`,
+      );
+      return;
+    }
+
+    const propertyMappings = JSON.parse(
+      readFileSync(statsConfigPath, 'utf8'),
+    ).properties;
+
     await Promise.all(
       Object.entries(request.leaderboards).map(
         async ([leaderboardId, leaderboard]) => {
           const stats: Leaderboard['stats'] = {};
           Object.entries(leaderboard.stats).forEach(([propId, stat]) => {
-            const statId = this.getLeaderboardStatId(
-              new PropertyId(propId),
-              new TitleId(titleId),
-            );
-            if (statId !== undefined) stats[`${statId}`] = stat;
-            else console.warn('UNKNOWN STAT ID FOR PROPERTY ' + propId);
+            const propIdString =
+              propertyMappings[new PropertyId(propId).toString()];
+
+            if (!(propIdString in propertyMappings)) {
+              console.warn('UNKNOWN STAT ID FOR PROPERTY ' + propId);
+              return;
+            }
+
+            const statId = propertyMappings[propIdString].statId;
+            stats[`${statId}`] = stat;
           });
 
           return await this.commandBus.execute(
@@ -352,40 +377,5 @@ export class SessionController {
         },
       ),
     );
-  }
-
-  // TODO: This should be database or config driven.
-  getLeaderboardStatId(
-    propertyId: PropertyId,
-    titleId: TitleId,
-  ): number | undefined {
-    switch (titleId.value) {
-      case 0x4d5307e6:
-      case 0x4d53883a:
-      case 0x4d53880c:
-        switch (propertyId.value) {
-          //case 0x10000005 // playlist EXP, I think
-          case 0x10000006: // total EXP, i think
-            return 4;
-          case 0x10000007: // exp penalty (leaving games)
-            return 5;
-          case 0x10000010: // custom-games-played
-            return 1;
-          case 0x10000011: // custom-games-won
-            return 3;
-          case 0x1000800a: // social-games-played
-            return 12;
-          // case 0x: // ranked-games-played
-          //   return 9;
-          // case 0x: // highest skill
-          //   return 7;
-          case 0x10000050: // playlist exp
-            return 5;
-          case 0x10000051: // playlist exp penalty
-            return 6;
-          // case : // playlist skill (kinda)
-          //   return 3;
-        }
-    }
   }
 }

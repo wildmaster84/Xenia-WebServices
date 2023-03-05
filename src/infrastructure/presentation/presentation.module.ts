@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppLoggerMiddleware } from './AppLoggerMiddleware';
 import { TitleController } from './controllers/title.controller';
 import { CqrsModule } from '@nestjs/cqrs';
-import TitleServerPresentationMapper from './mappers/TitleServerPresentationMapper';
 import SessionPresentationMapper from './mappers/SessionPresentationMapper';
 import { XNetController } from './controllers/xnet.controller';
 import { SessionController } from './controllers/session.controller';
@@ -10,9 +9,7 @@ import { PlayerController } from './controllers/player.controller';
 import { LeaderboardsController } from './controllers/leaderboards.controller';
 
 @Module({
-  imports: [
-    CqrsModule,
-  ],
+  imports: [CqrsModule],
   controllers: [
     TitleController,
     XNetController,
@@ -20,10 +17,7 @@ import { LeaderboardsController } from './controllers/leaderboards.controller';
     PlayerController,
     LeaderboardsController,
   ],
-  providers: [
-    TitleServerPresentationMapper,
-    SessionPresentationMapper,
-  ],
+  providers: [SessionPresentationMapper],
 })
 export class PresentationModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {

@@ -14,11 +14,9 @@ import { FindPlayerQueryHandler } from './queryHandlers/FindPlayerQueryHandler';
 import { FindPlayerSessionQueryHandler } from './queryHandlers/FindPlayerSessionQueryHandler';
 import { GetPlayerQueryHandler } from './queryHandlers/GetPlayerQueryHandler';
 import { GetSessionsQueryHandler } from './queryHandlers/GetSessionQueryHandler';
-import { GetTitleServersQueryHandler } from './queryHandlers/GetTitleServerQueryHandler';
 import { SessionSearchQueryHandler } from './queryHandlers/SessionSearchQueryHandler';
 
 export const queryHandlers = [
-  GetTitleServersQueryHandler,
   GetSessionsQueryHandler,
   SessionSearchQueryHandler,
   FindPlayerQueryHandler,

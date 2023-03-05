@@ -1,0 +1,17 @@
+[
+    {
+        "info": "Game server port.",
+        "port": 80,
+        "mappedTo": 8000
+    },
+    {
+        "info": "Player port 1.",
+        "port": 1000,
+        "mappedTo": 36000
+    },
+    {
+        "info": "Player port 2.",
+        "port": 1001,
+        "mappedTo": 36001
+    }
+]
