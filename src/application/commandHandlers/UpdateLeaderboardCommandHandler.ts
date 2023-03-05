@@ -32,7 +32,6 @@ export class UpdateLeaderboardCommandHandler
         stats: command.stats,
       });
     }
-
     await this.repository.save(leaderboard);
   }
 }

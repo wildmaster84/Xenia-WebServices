@@ -13,5 +13,5 @@ export class FindLeaderboardsRequest {
   @ApiProperty()
   titleId: string;
   @ApiProperty()
-  leaderboard: FindLeaderboardRequestLeaderboardQuery[];
+  queries: FindLeaderboardRequestLeaderboardQuery[];
 }

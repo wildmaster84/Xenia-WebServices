@@ -26,6 +26,7 @@ export default class LeaderboardRepository implements ILeaderboardRepository {
       {
         id: leaderboard.id.value,
         titleId: leaderboard.titleId.toString(),
+        player: leaderboard.player.value,
       },
       this.leaderboardPersistanceMapper.mapToDataModel(leaderboard),
       {

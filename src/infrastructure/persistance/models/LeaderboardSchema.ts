@@ -5,7 +5,7 @@ export type LeaderboardDocument = Leaderboard & Document;
 
 @Schema()
 export class Leaderboard {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   id: string;
   @Prop({ required: true })
   titleId: string;

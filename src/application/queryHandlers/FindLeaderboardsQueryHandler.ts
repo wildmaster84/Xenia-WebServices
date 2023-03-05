@@ -30,6 +30,7 @@ export class FindLeaderboardsQueryHandler
               leaderboardQuery.id,
               player,
             );
+            if (!leaderboard) return;
             const stats: FindLeaderboardsResponse[0]['players'][0]['stats'] = [];
             const acceptedStatIds = leaderboardQuery.statisticIds.map(
               (stat) => stat.value,
@@ -50,7 +51,8 @@ export class FindLeaderboardsQueryHandler
             });
           }),
         );
-        res.push(leaderboardResponse);
+        if (leaderboardResponse.players.length > 0)
+          res.push(leaderboardResponse);
       }),
     );
 

@@ -5,7 +5,7 @@ interface WriteStatsRequestLeaderboardStatistic {
 
 interface WriteStatsRequestLeaderboard {
   stats: {
-    [statisticId: string]: WriteStatsRequestLeaderboardStatistic
+    [propertyId: string]: WriteStatsRequestLeaderboardStatistic
   }
 }
 

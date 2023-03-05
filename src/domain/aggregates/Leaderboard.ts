@@ -30,7 +30,13 @@ export default class Leaderboard {
 
   public update(props: UpdateProps) {
     Object.entries(props.stats).forEach(([key, value]) => {
-      this.props.stats[key] = value;
+      if (!(key in this.props.stats)) {
+        this.props.stats[key] = value;
+        this.props.stats[key].value = 0;
+      }
+      this.props.stats[key].type = value.type;
+      // Stats shouldn't always be added, for example there are timestamp stats.
+      this.props.stats[key].value += value.value;
     });
   }
 
