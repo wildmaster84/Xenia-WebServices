@@ -50,9 +50,11 @@ import LeaderboardId from 'src/domain/value-objects/LeaderboardId';
 import { WriteStatsRequest } from '../requests/WriteStatsRequest';
 import LeaderboardStatId from 'src/domain/value-objects/LeaderboardStatId';
 import PropertyId from 'src/domain/value-objects/PropertyId';
-import Leaderboard from 'src/domain/aggregates/Leaderboard';
+import Leaderboard, { LeaderboardUpdateProps } from 'src/domain/aggregates/Leaderboard';
 import { FindPlayerSessionQuery } from 'src/application/queries/FindPlayerSessionQuery';
 import axios from 'axios';
+import { MigrateSessionCommand } from 'src/application/commands/MigrateSessionCommand';
+import { MigrateSessionRequest } from '../requests/MigrateSessionRequest';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -122,6 +124,35 @@ export class SessionController {
     return this.sessionMapper.mapToPresentationModel(session);
   }
 
+  @Post('/:sessionId/migrate')
+  @ApiParam({ name: 'titleId', example: '4D5307E6' })
+  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  async migrateSession(
+    @Param('titleId') titleId: string,
+    @Param('sessionId') sessionId: string,
+    @Body() request: MigrateSessionRequest,
+  ) {
+    const session = await this.queryBus.execute(
+      new GetSessionQuery(new TitleId(titleId), new SessionId(sessionId)),
+    );
+
+    if (!session) {
+      throw new NotFoundException('Session not found.');
+    }
+
+    const newSession = await this.commandBus.execute(
+      new MigrateSessionCommand(
+        new TitleId(titleId),
+        new SessionId(sessionId),
+        new IpAddress(request.hostAddress),
+        new MacAddress(request.macAddress),
+        request.port,
+      ),
+    );
+
+    return this.sessionMapper.mapToPresentationModel(newSession);
+  }
+
   @Delete('/:sessionId')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
   @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
@@ -143,7 +174,7 @@ export class SessionController {
       ipv4 = res.data;
     }
 
-    if (session == undefined || session.hostAddress !== ipv4) return;
+    if (session == undefined || session.hostAddress.value !== ipv4) return;
 
     await this.commandBus.execute(
       new DeleteSessionCommand(new TitleId(titleId), new SessionId(sessionId)),
@@ -376,7 +407,7 @@ export class SessionController {
     await Promise.all(
       Object.entries(request.leaderboards).map(
         async ([leaderboardId, leaderboard]) => {
-          const stats: Leaderboard['stats'] = {};
+          const stats: LeaderboardUpdateProps['stats'] = {};
           Object.entries(leaderboard.stats).forEach(([propId, stat]) => {
             const propertyMapping =
               propertyMappings[new PropertyId(propId).toString()];
@@ -387,7 +418,11 @@ export class SessionController {
             }
 
             const statId = propertyMapping.statId;
-            stats[`${statId}`] = stat;
+
+            stats[`${statId}`] = {
+              ...stat,
+              method: propertyMapping.method,
+            };
           });
 
           return await this.commandBus.execute(

@@ -61,6 +61,7 @@ export default class SessionRepository implements ISessionRepository {
       {
         advertised: true,
         deleted: false,
+        migration: undefined,
         titleId: titleId.toString(),
       },
       undefined,

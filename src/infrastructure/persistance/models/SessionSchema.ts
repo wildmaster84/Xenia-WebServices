@@ -27,6 +27,8 @@ export class Session {
   players: string[];
   @Prop({ required: true, default: false })
   deleted: boolean;
+  @Prop({ required: false })
+  migration: string;
 
   @Prop({ type: Date, expires: 60 * 60, required: true })
   updatedAt: Date;

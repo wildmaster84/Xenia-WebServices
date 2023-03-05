@@ -15,8 +15,7 @@ export class LeaveSessionCommandHandler
   async execute(command: LeaveSessionCommand) {
     const session = await this.repository.findSession(command.titleId, command.sessionId);
 
-    if (!session)
-      return;
+    if (session == undefined) return;
 
     session.leave({
       xuids: command.xuids,

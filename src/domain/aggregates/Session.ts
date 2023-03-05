@@ -4,6 +4,7 @@ import SessionFlags from '../value-objects/SessionFlags';
 import SessionId from '../value-objects/SessionId';
 import TitleId from '../value-objects/TitleId';
 import Xuid from '../value-objects/Xuid';
+import crypto from 'crypto';
 
 interface SessionProps {
   id: SessionId;
@@ -16,6 +17,7 @@ interface SessionProps {
   port: number;
   players: Xuid[];
   deleted: boolean;
+  migration?: SessionId;
 }
 
 interface CreateProps {
@@ -33,6 +35,13 @@ interface ModifyProps {
   flags: SessionFlags;
   publicSlotsCount: number;
   privateSlotsCount: number;
+}
+
+interface CreateMigrationProps {
+  session: Session;
+  hostAddress: IpAddress;
+  macAddress: MacAddress;
+  port: number;
 }
 
 interface JoinProps {
@@ -58,6 +67,28 @@ export default class Session {
     });
   }
 
+  static randomSessionId() {
+    const bytesHex = crypto
+      .randomBytes(8)
+      .reduce((o, v) => o + ('00' + v.toString(16)).slice(-2), '');
+
+    return bytesHex;
+  }
+
+  public static createMigration(props: CreateMigrationProps) {
+    const newSession = new Session({
+      ...props.session.props,
+      id: new SessionId(this.randomSessionId()),
+      hostAddress: props.hostAddress,
+      macAddress: props.macAddress,
+      port: props.port,
+    });
+
+    props.session.props.migration = newSession.id;
+
+    return newSession;
+  }
+
   public modify(props: ModifyProps) {
     this.props.flags = this.flags.modify(props.flags);
     this.props.privateSlotsCount = props.privateSlotsCount;
@@ -74,7 +105,7 @@ export default class Session {
 
   public leave(props: LeaveProps) {
     const xuidValues = props.xuids.map((xuid) => xuid.value);
-    this.props.players = this.props.players.filter((player) => xuidValues.includes(player.value));
+    this.props.players = this.props.players.filter((player) => !xuidValues.includes(player.value));
   }
 
   public delete() {
@@ -136,5 +167,9 @@ export default class Session {
 
   get deleted() {
     return this.props.deleted;
+  }
+
+  get migration() {
+    return this.props.migration;
   }
 }

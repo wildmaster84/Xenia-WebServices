@@ -2,43 +2,53 @@
     "properties": {
         "0x10000006": {
             "info": "base exp",
+            "method": "sum",
             "statId": 4
         },
         "0x10000007": {
             "info": "penalty exp",
-            "statid": 5
+            "method": "min",
+            "statId": 5
         },
         "0x10000010": {
             "info": "custom games played",
-            "statid": 1
+            "method": "min",
+            "statId": 1
         },
         "0x10000011": {
             "info": "custom games won",
-            "statid": 3
+            "method": "sum",
+            "statId": 3
         },
-        "0x1000800a": {
+        "0x1000000d": {
             "info": "social games played",
-            "statid": 12
+            "method": "sum",
+            "statId": 12
         },
         "0x10000050": {
             "info": "playlist exp",
-            "statid": 5
+            "method": "sum",
+            "statId": 5
         },
         "0x10000051": {
             "info": "playlist exp penalty",
-            "statid": 6
+            "method": "min",
+            "statId": 6
         },
         "unk1": {
-            "info": "anked games played",
-            "statid": 9
+            "info": "ranked games played",
+            "method": "min",
+            "statId": 9
         },
         "unk2": {
             "info": "highest skill",
-            "statid": 7
+            "method": "set",
+            "statId": 7
         },
         "unk3": {
             "info": "playlist skill ?",
-            "statid": 3
+            "method": "set",
+            "statId": 3
         }
     }
 }

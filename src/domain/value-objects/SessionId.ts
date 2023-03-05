@@ -6,6 +6,6 @@ export default class SessionId extends TinyTypeOf<string>() {
       throw new Error('Invalid SessionId ' + value);
     }
 
-    super(value.toUpperCase());
+    super(value.toLowerCase());
   }
 }

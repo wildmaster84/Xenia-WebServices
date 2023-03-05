@@ -11,8 +11,12 @@ interface LeaderboardProps {
   stats: { [statId: LeaderboardStatId['value']]: LeaderboardStat };
 }
 
-interface UpdateProps {
-  stats: { [statId: LeaderboardStatId['value']]: LeaderboardStat };
+export interface LeaderboardUpdateProps {
+  stats: {
+    [statId: LeaderboardStatId['value']]: LeaderboardStat & {
+      method: 'min' | 'sum' | 'set';
+    };
+  };
 }
 
 export default class Leaderboard {
@@ -28,15 +32,23 @@ export default class Leaderboard {
     });
   }
 
-  public update(props: UpdateProps) {
+  public update(props: LeaderboardUpdateProps) {
     Object.entries(props.stats).forEach(([key, value]) => {
       if (!(key in this.props.stats)) {
-        this.props.stats[key] = value;
-        this.props.stats[key].value = 0;
+        this.props.stats[key] = {
+          type: value.type,
+          value: value.value,
+        };
       }
       this.props.stats[key].type = value.type;
       // Stats shouldn't always be added, for example there are timestamp stats.
-      this.props.stats[key].value += value.value;
+      if (value.method == 'sum') this.props.stats[key].value += value.value;
+      if (value.method == 'set') this.props.stats[key].value = value.value;
+      if (value.method == 'min')
+        this.props.stats[key].value = Math.min(
+          value.value,
+          this.props.stats[key].value,
+        );
     });
   }
 
