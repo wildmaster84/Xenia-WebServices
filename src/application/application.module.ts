@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Session, SessionSchema } from 'src/infrastructure/persistance/models/SessionSchema';
 import { PersistanceModule } from 'src/infrastructure/persistance/persistance.module';
 import { CreatePlayerCommandHandler } from './commandHandlers/CreatePlayerCommandHandler';
 import { CreateSessionCommandHandler } from './commandHandlers/CreateSessionCommandHandler';
@@ -39,7 +41,11 @@ export const commandHandlers = [
 ];
 
 @Module({
-  imports: [CqrsModule, PersistanceModule],
+  imports: [
+    CqrsModule,
+    PersistanceModule,
+    MongooseModule.forFeature([{ name: Session.name, schema: SessionSchema }]),
+  ],
   providers: [...queryHandlers, ...commandHandlers],
 })
 export class ApplicationModule {}
