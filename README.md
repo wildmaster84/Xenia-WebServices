@@ -35,6 +35,9 @@ $ npm run start:prod
 ## Adding Title Support
 
 If you would like to add a title to this API, check out the `titles` folder for examples!
+
 Titles can provide a 'title server' address, which is basically an IP address the game will try to connect to and use as a game-server. Not all games use the 'title server' system.
+
 Titles can also provide 'port mappings', wherin you can reroute game ports for title servers or player communication. We recommend using ports 3600X for players and 3601X for title servers.
+
 Finally, titles must provide leaderboard configuration to push statistics to the API. This is more complicated and takes trial and error. I'd recommend selfhosting the API to debug this.
