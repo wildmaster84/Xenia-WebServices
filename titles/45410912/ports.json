@@ -1,4 +1,4 @@
-{ 
+{
     "bind": [
         {
             "info": "Player port 1.",
@@ -9,6 +9,61 @@
             "info": "Player port 2.",
             "port": 0,
             "mappedTo": 36002
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27005,
+            "mappedTo": 27005
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27026,
+            "mappedTo": 27026
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27027,
+            "mappedTo": 27027
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27028,
+            "mappedTo": 27028
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27029,
+            "mappedTo": 27029
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27030,
+            "mappedTo": 27030
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27031,
+            "mappedTo": 27031
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27032,
+            "mappedTo": 27032
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27033,
+            "mappedTo": 27033
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27034,
+            "mappedTo": 27034
+        },
+        {
+            "info": "Unknown Port",
+            "port": 27035,
+            "mappedTo": 27035
         }
     ]
 }
