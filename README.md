@@ -40,4 +40,6 @@ Titles can provide a 'title server' address, which is basically an IP address th
 
 Titles can also provide 'port mappings', wherin you can reroute game ports for title servers or player communication. We recommend using ports 3600X for players and 3601X for title servers.
 
-Finally, titles must provide leaderboard configuration to push statistics to the API. This is more complicated and takes trial and error. I'd recommend selfhosting the API to debug this.
+Titles must provide leaderboard configuration to push statistics to the API. This is more complicated and takes trial and error. I'd recommend selfhosting the API to debug this.
+
+Finally, you can also throw any title-specific netplay related patches in the `patches` folder!
