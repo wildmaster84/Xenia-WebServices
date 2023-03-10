@@ -6,9 +6,19 @@
             "mappedTo": 36001
         },
         {
+            "info": "Unknown Port, seems to be used during matchmaking?",
+            "port": 27027,
+            "mappedTo": 36002
+        },
+        {
+            "info": "We need to self map this as the title will look up the mapped port.",
+            "port": 36002,
+            "mappedTo": 36002
+        },
+        {
             "info": "Player port 2.",
             "port": 0,
-            "mappedTo": 36002
+            "mappedTo": 36003
         },
         {
             "info": "Unknown Port",
@@ -19,11 +29,6 @@
             "info": "Unknown Port",
             "port": 27026,
             "mappedTo": 27026
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27027,
-            "mappedTo": 27027
         },
         {
             "info": "Unknown Port",
