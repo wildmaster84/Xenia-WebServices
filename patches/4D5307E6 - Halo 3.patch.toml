@@ -34,3 +34,17 @@ title_id = "4D5307E6" # MS-2022
     [[patch.be32]]
         address = 0x826D339C
         value = 0x60000000
+
+[[patch]]
+    name = "Ignore session arbitration"
+    desc = "Crude temporary solution"
+    author = "codie"
+    is_enabled = true
+
+    [[patch.be16]]
+        address = 0x82400C40
+        value = 0x4800
+
+    [[patch.be16]]
+        address = 0x82400C60
+        value = 0x4800
