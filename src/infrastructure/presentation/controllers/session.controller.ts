@@ -88,6 +88,13 @@ export class SessionController {
           request.port,
         ),
       );
+
+      try {
+        const player = await this.queryBus.execute(new FindPlayerQuery(new IpAddress(request.hostAddress)));
+        await this.commandBus.execute(new SetPlayerSessionIdCommand(player.xuid, new SessionId(request.sessionId)));
+      } catch (error) {
+        console.log("BAD PLAYER " + request.hostAddress)
+      }
     } else {
       console.log('Peer joining session' + request.sessionId);
       session = await this.queryBus.execute(
@@ -96,13 +103,6 @@ export class SessionController {
           new SessionId(request.sessionId),
         ),
       );
-    }
-
-    try {
-      const player = await this.queryBus.execute(new FindPlayerQuery(new IpAddress(request.hostAddress)));
-      await this.commandBus.execute(new SetPlayerSessionIdCommand(player.xuid, new SessionId(request.sessionId)));
-    } catch (error) {
-      console.log("BAD PLAYER " + request.hostAddress)
     }
   }
 
