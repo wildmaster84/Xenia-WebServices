@@ -22,6 +22,7 @@ export class DeleteSessionCommandHandler
       command.title,
       command.sessionId,
     );
+
     if (session) {
       session.delete();
       this.repository.save(session);
@@ -35,6 +36,8 @@ export class DeleteSessionCommandHandler
 
       if (existsSync(qosPath)) {
         await unlink(qosPath);
+
+        console.log("Deleted session: " + session.id.value);
       }
     }
   }

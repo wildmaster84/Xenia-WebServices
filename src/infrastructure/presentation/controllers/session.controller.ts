@@ -93,16 +93,20 @@ export class SessionController {
         const player = await this.queryBus.execute(new FindPlayerQuery(new IpAddress(request.hostAddress)));
         await this.commandBus.execute(new SetPlayerSessionIdCommand(player.xuid, new SessionId(request.sessionId)));
       } catch (error) {
-        console.log("BAD PLAYER " + request.hostAddress)
+        console.log("BAD PLAYER " + request.hostAddress);
+        console.log(session);
       }
     } else {
       console.log('Peer joining session' + request.sessionId);
-      session = await this.queryBus.execute(
-        new GetSessionQuery(
-          new TitleId(titleId),
-          new SessionId(request.sessionId),
-        ),
+
+      var sessionQuery = new GetSessionQuery(
+        new TitleId(titleId),
+        new SessionId(request.sessionId),
       );
+
+      console.log(sessionQuery);
+
+      session = await this.queryBus.execute(sessionQuery);
     }
   }
 
@@ -168,12 +172,20 @@ export class SessionController {
     const splitIp = ip.split(':');
     let ipv4 = splitIp[splitIp.length - 1];
 
-    if (ipv4 == "127.0.0.1" || ipv4.startsWith("192.168")) {
+    if (ipv4 == "127.0.0.1" || ipv4.startsWith("192.168") || ipv4.startsWith("10")) {
       // Hi me! Who are you?
       const res = await axios.get("https://api.ipify.org/");
       ipv4 = res.data;
     }
 
+    if (session) {
+      console.log("Host Address: " + session.hostAddress.value);
+      console.log("IPV4 Address: " + ipv4);
+    } else {
+      console.log("Session alresdy deleted?? " + ipv4);
+      console.log(session);
+    }
+    
     if (session == undefined || session.hostAddress.value !== ipv4) return;
 
     await this.commandBus.execute(
@@ -214,9 +226,6 @@ export class SessionController {
       players: session.players.map((xuid) => ({xuid: xuid.value})),
     };
   }
-
-
-
 
   @Get('/:sessionId/arbitration')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
@@ -370,7 +379,11 @@ export class SessionController {
     if (!stats.isFile()) throw new NotFoundException();
 
     res.set('Content-Length', stats.size.toString());
-    return new StreamableFile(createReadStream(path));
+    return new StreamableFile(createReadStream(path)).setErrorHandler(
+      err => {
+        console.log("Error requesting qos: " + err.message);
+      }
+    );
   }
 
   @Post('/:sessionId/leaderboards')

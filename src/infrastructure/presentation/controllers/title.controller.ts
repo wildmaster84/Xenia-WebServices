@@ -44,7 +44,11 @@ export class TitleController {
     const stats = await stat(path);
 
     res.set('Content-Length', stats.size.toString());
-    return new StreamableFile(createReadStream(path));
+    return new StreamableFile(createReadStream(path)).setErrorHandler(
+      err => {
+        console.log("Error requesting servers.json: " + err.message);
+      }
+    );
   }
 
   @Get('/ports')
@@ -66,6 +70,13 @@ export class TitleController {
     const stats = await stat(path);
 
     res.set('Content-Length', stats.size.toString());
-    return new StreamableFile(createReadStream(path));
+    var ports = new StreamableFile(createReadStream(path))
+    .setErrorHandler(
+      err => {
+        console.log("Error requesting ports.json: " + err.message);
+      }
+    );
+
+    return ports;
   }
 }
