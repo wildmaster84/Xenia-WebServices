@@ -1,7 +1,12 @@
 {
     "bind": [
         {
-            "info": "Player port 1.",
+            "info": "Client Port",
+            "port": 27005,
+            "mappedTo": 27005
+        },
+        {
+            "info": "Host Port",
             "port": 27015,
             "mappedTo": 36001
         },
@@ -19,11 +24,6 @@
             "info": "Player port 2.",
             "port": 0,
             "mappedTo": 36003
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27005,
-            "mappedTo": 27005
         },
         {
             "info": "Unknown Port",

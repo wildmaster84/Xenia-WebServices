@@ -9,6 +9,7 @@ export default abstract class AbstractEnvSettings<T> {
       },
       persistance: {
         mongoURI: process.env.MONGO_URI,
+        swagger_API: process.env.SWAGGER_API,
       },
     };
   }

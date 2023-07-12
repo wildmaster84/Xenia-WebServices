@@ -15,6 +15,7 @@ This API was put together in one restless week, it's quite rough. If you'd like 
 ```env
   API_PORT=36000
   MONGO_URI=
+  SWAGGER_API=true
 ```
 
 3. Build the web service with the `npm run build` command.

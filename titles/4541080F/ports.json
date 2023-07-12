@@ -1,0 +1,34 @@
+{
+  "bind": [
+      {
+        "info": "Client Port",
+        "port": 27005,
+        "mappedTo": 27005
+      },
+      {
+        "info": "Host Port",
+        "port": 27015,
+        "mappedTo": 27015
+      },
+      {
+        "info": "Unknown",
+        "port": 27020,
+        "mappedTo": 27020
+      },
+      {
+        "info": "Unknown",
+        "port": 27025,
+        "mappedTo": 27025
+      },
+      {
+        "info": "Unknown",
+        "port": 27030,
+        "mappedTo": 27030
+      },
+      {
+        "info": "Unknown",
+        "port": 27029,
+        "mappedTo": 27029
+      }
+  ]
+}

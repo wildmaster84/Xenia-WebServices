@@ -1,14 +1,17 @@
 import {
   Controller,
   Get,
+  Req,
   Inject,
   Post,
 } from '@nestjs/common';
+import * as requestIp from 'request-ip';
 import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import { Ip } from '@nestjs/common/decorators';
 import axios from 'axios';
+import { GetIPAddress } from '../../../decorators/client-ip.decorator';
 
 @ApiTags('XNet')
 @Controller()
@@ -20,7 +23,11 @@ export class XNetController {
   ) {}
 
   @Get('/whoami')
-  async getClientAddress(@Ip() ip: string) {
+  async getClientAddress(@GetIPAddress() IPAddress : string, @Req() request: Request) {
+    // console.log(IPAddress); // Null??
+
+    const ip = requestIp.getClientIp(request);
+
     const splitIp = ip.split(':');
     let ipv4 = splitIp[splitIp.length - 1];
 
