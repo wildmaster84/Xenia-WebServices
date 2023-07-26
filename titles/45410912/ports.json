@@ -1,74 +1,29 @@
 {
     "bind": [
-        {
-            "info": "Client Port",
-            "port": 27005,
-            "mappedTo": 27005
-        },
-        {
-            "info": "Host Port",
-            "port": 27015,
-            "mappedTo": 36001
-        },
-        {
-            "info": "Unknown Port, seems to be used during matchmaking?",
-            "port": 27027,
-            "mappedTo": 36002
-        },
-        {
-            "info": "We need to self map this as the title will look up the mapped port.",
-            "port": 36002,
-            "mappedTo": 36002
-        },
-        {
-            "info": "Player port 2.",
-            "port": 0,
-            "mappedTo": 36003
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27026,
-            "mappedTo": 27026
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27028,
-            "mappedTo": 27028
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27029,
-            "mappedTo": 27029
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27030,
-            "mappedTo": 27030
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27031,
-            "mappedTo": 27031
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27032,
-            "mappedTo": 27032
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27033,
-            "mappedTo": 27033
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27034,
-            "mappedTo": 27034
-        },
-        {
-            "info": "Unknown Port",
-            "port": 27035,
-            "mappedTo": 27035
-        }
+      {
+        "info": "Client Port",
+        "port": 27005,
+        "mappedTo": 27005
+      },
+      {
+        "info": "Host Port",
+        "port": 27015,
+        "mappedTo": 27015
+      },
+      {
+        "info": "Unknown",
+        "port": 27026,
+        "mappedTo": 27026
+      },
+      {
+        "info": "Unknown",
+        "port": 27027,
+        "mappedTo": 27027
+      },
+      {
+        "info": "Unknown",
+        "port": 27028,
+        "mappedTo": 27028
+      }
     ]
-}
+  }
