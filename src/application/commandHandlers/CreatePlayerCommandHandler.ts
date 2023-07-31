@@ -27,11 +27,5 @@ export class CreatePlayerCommandHandler
         machineId: command.machineId,
       }),
     );
-
-    // Delete any existing sessions on this address.
-    // This is a dirty way of handling sessions which have been hung advertised, due to a crash or otherwise.
-    await this.SessionModel.deleteMany({
-      hostAddress: command.hostAddress.value,
-    });
   }
 }

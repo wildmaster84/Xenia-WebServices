@@ -10,6 +10,7 @@ import { SessionDocument } from '../models/SessionSchema';
 import TitleId from 'src/domain/value-objects/TitleId';
 import SessionId from 'src/domain/value-objects/SessionId';
 import Xuid from 'src/domain/value-objects/Xuid';
+import IpAddress from 'src/domain/value-objects/IpAddress';
 
 @Injectable()
 export default class SessionRepository implements ISessionRepository {
@@ -33,6 +34,27 @@ export default class SessionRepository implements ISessionRepository {
         new: true,
       },
     );
+  }
+
+  public async findSessionsByIP(ip: IpAddress) {
+    const sessions = await this.SessionModel.find(
+      {
+        hostAddress: ip.value.toString()
+      }
+    );
+
+    return sessions.map(this.sessionDomainMapper.mapToDomainModel);
+  }
+
+  public async deleteSessions(sessions: Session[]) {
+    // Deletes all sessions based on IP this will cause two players on the same network to delete each others sessions.
+    // This needs fixing!
+    if (sessions.length > 0) {
+      const result = await this.SessionModel.deleteMany({ sessions });
+      console.log("Deleted " + result.deletedCount + " sessions from " + sessions[0].hostAddress.value);
+    } else {
+      console.log("Sessions already deleted.");
+    }
   }
 
   public async findSession(titleId: TitleId, id: SessionId) {

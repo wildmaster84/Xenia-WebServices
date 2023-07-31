@@ -18,11 +18,27 @@ export class DeleteSessionCommandHandler
   ) {}
 
   async execute(command: DeleteSessionCommand) {
-    const session = await this.repository.findSession(
-      command.title,
-      command.sessionId,
-    );
+    if (command.hostAddress) {
+      console.log("Deleting all sessions from " + command.hostAddress.value);
 
+      const sessions = await this.repository.findSessionsByIP(
+        command.hostAddress
+      );
+
+      await this.repository.deleteSessions(sessions);
+    }
+
+    if (command.sessionId) {
+      const session = await this.repository.findSession(
+        command.title,
+        command.sessionId,
+      );
+
+      this.deleteSession(session);
+    }
+  }
+
+  async deleteSession(session: Session) {
     if (session) {
       session.delete();
       this.repository.save(session);

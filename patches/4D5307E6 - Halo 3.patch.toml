@@ -2,6 +2,34 @@ title_name = "Halo 3"
 title_id = "4D5307E6" # MS-2022
 
 [[patch]]
+    name = "Network Matchmaking Force Search"
+    desc = "networking:logic:life-cycle:matchmaking_start: FORCE SEARCH"
+    author = "twister"
+    is_enabled = false
+
+    [[patch.be32]]
+        address = 0x823FD1A0
+        value = 0x38600001 # li r3,1
+
+    [[patch.be32]]
+        address = 0x823FD1A4
+        value = 0x4E800020 # blr
+
+[[patch]]
+    name = "Network Matchmaking Force Gather"
+    desc = "networking:logic:life-cycle:matchmaking_start: FORCE GATHER"
+    author = "twister"
+    is_enabled = false
+
+    [[patch.be32]]
+        address = 0x823FD1A0
+        value = 0x38600002 # li r3,2
+
+    [[patch.be32]]
+        address = 0x823FD1A4
+        value = 0x4E800020 # blr
+
+[[patch]]
     name = "Allow public IP addresses."
     desc = "Allows the game to connect to players who are not on the current network."
     author = "craftycodie"
