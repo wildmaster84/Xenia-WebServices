@@ -50,8 +50,10 @@ export default class SessionRepository implements ISessionRepository {
     // Deletes all sessions based on IP this will cause two players on the same network to delete each others sessions.
     // This needs fixing!
     if (sessions.length > 0) {
-      const result = await this.SessionModel.deleteMany({ sessions });
-      console.log("Deleted " + result.deletedCount + " sessions from " + sessions[0].hostAddress.value);
+      const hostAddress = sessions[0].hostAddress.value;
+      const deleteResult = await this.SessionModel.deleteMany( { "hostAddress" : hostAddress } );
+
+      console.log("Deleted " + deleteResult.deletedCount + " sessions from " + hostAddress);
     } else {
       console.log("Sessions already deleted.");
     }
