@@ -179,7 +179,7 @@ export class SessionController {
     const splitIp = ip.split(':');
     let ipv4 = splitIp[splitIp.length - 1];
 
-    if (ipv4 == "127.0.0.1" || ipv4.startsWith("192.168") || ipv4.startsWith("10")) {
+    if (ipv4 == "127.0.0.1" || ipv4.startsWith("192.168") || ipv4.split(".")[0] == "10") {
       // Hi me! Who are you?
       const res = await axios.get("https://api.ipify.org/");
       ipv4 = res.data;
@@ -359,6 +359,8 @@ export class SessionController {
     @Req() req: RawBodyRequest<Request>,
   ) {
     const qosPath = join(process.cwd(), 'qos', titleId, sessionId);
+
+    console.log("Saving QoS Data.");
 
     if (!existsSync(qosPath)) {
       await mkdir(join(process.cwd(), 'qos', titleId), { recursive: true });
