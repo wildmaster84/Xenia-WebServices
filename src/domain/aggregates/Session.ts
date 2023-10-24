@@ -82,6 +82,7 @@ export default class Session {
       hostAddress: props.hostAddress,
       macAddress: props.macAddress,
       port: props.port,
+      deleted: false,
     });
 
     props.session.props.migration = newSession.id;
