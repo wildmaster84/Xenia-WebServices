@@ -69,7 +69,8 @@ export class XNetController {
       ipv4 = res.data;
     }
 
-    // hmm two nulls
+    // title id and session id are required to delete QoS data.
+    // This needs fixing!
     await this.commandBus.execute(
       new DeleteSessionCommand(null, null, new IpAddress(ipv4)),
     );

@@ -77,7 +77,7 @@ export class SessionController {
     const flags = new SessionFlags(request.flags);
     let session: Session;
     if (flags.isHost) {
-      console.log('Host creating session' + request.sessionId);
+      console.log('Host creating session: ' + request.sessionId);
       session = await this.commandBus.execute(
         new CreateSessionCommand(
           new TitleId(titleId),
@@ -360,12 +360,15 @@ export class SessionController {
   ) {
     const qosPath = join(process.cwd(), 'qos', titleId, sessionId);
 
-    console.log("Saving QoS Data.");
-
-    if (!existsSync(qosPath)) {
+    if (existsSync(qosPath)) {
+      console.log("Updating QoS Data.");
+    } else {
       await mkdir(join(process.cwd(), 'qos', titleId), { recursive: true });
-      await writeFile(qosPath, req.rawBody);
+      console.log("Saving QoS Data.");
     }
+
+    // always write QoS data to ensure data is updated.
+    await writeFile(qosPath, req.rawBody);
   }
 
   @Get('/:sessionId/qos')
