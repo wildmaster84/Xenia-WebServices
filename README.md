@@ -14,7 +14,7 @@ If you'd like to help improve this, checkout the [open issues](https://github.co
 
 ```env
   API_PORT=36000
-  MONGO_URI=
+  MONGO_URI=mongodb://localhost:27017/
   SWAGGER_API=true
 ```
 
@@ -74,7 +74,9 @@ If you would like to add a title to this API, check out the `titles` folder for 
 
 Titles can provide a 'title server' address, which is basically an IP address the game will try to connect to and use as a game-server. Not all games use the 'title server' system.
 
-Titles can also provide 'port mappings', wherein you can reroute game ports for title servers or player communication. We recommend using ports 3600X for players and 3601X for title servers. If a title uses a random port, this can be captured as port 0, and mapped accordingly. Port mappings are not a requirement it's an optional feature. It may be useful to map ports which conflict with Windows or Linux. Some titles may fail to work if ports are changed for example Source Engine games.
+Titles can also provide 'port mappings', wherein you can reroute game ports for title servers or player communication. We recommend using ports 3600X for players and 3601X for title servers. If a title uses a random port, this can be captured as port 0, and mapped accordingly.
+
+Port mappings are not a requirement it's an optional feature. It may be useful to map ports which conflict with Windows or Linux. Some titles may fail to work if ports are changed for example Source Engine games.
 
 To find the ports the title opens you can use [cports](https://www.nirsoft.net/utils/cports.html) and filter by process or you can search through ```xenia.log```.
 
