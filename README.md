@@ -9,7 +9,7 @@ If you'd like to help improve this, checkout the [open issues](https://github.co
 ## Preparing the project
 
 1. Install dependencies with the `npm install` command.
-2. Create a `.env` file in the project root, following this structure:
+2. Create a `.env` file in the project root, following this structure.
 3. [What is an .env file?](https://devcenter.heroku.com/articles/heroku-local#set-up-your-local-environment-variables)
 
 ```env

@@ -6,12 +6,12 @@
         "mappedTo": 27005
       },
       {
-        "info": "Host Port",
+        "info": "Server Port",
         "port": 27015,
         "mappedTo": 27015
       },
       {
-        "info": "Unknown",
+        "info": "SourceTV",
         "port": 27020,
         "mappedTo": 27020
       },
