@@ -76,7 +76,7 @@ export class SessionController {
     const flags = new SessionFlags(request.flags);
     let session: Session;
 
-    if (flags.isHost || flags.isStats) {
+    if (flags.isHost || flags.value == Flags.STATS) {
       console.log('Host creating session: ' + request.sessionId);
 
       session = await this.commandBus.execute(
