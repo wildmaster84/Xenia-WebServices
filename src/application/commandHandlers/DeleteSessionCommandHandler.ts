@@ -40,7 +40,7 @@ export class DeleteSessionCommandHandler
       if (existsSync(qosPath)) {
         await unlink(qosPath);
 
-        console.log("Deleted session: " + session.id.value);
+        console.log(`Soft Deleted Session: ${ session.id.value }`);
       }
     }
   }

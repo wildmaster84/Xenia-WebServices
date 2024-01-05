@@ -18,7 +18,6 @@ import MacAddress from 'src/domain/value-objects/MacAddress';
 
 @Injectable()
 export default class SessionRepository implements ISessionRepository {
-  repository: any;
   constructor(
     @Inject(ILoggerSymbol) private readonly logger: ILogger,
     @InjectModel(Session.name)
@@ -58,11 +57,13 @@ export default class SessionRepository implements ISessionRepository {
       return;
     }
 
-    const hostAddress = sessions[0].hostAddress.value;
-    const macAddress = sessions[0].macAddress.value;
-
     sessions.forEach(async session => {
-      await this.SessionModel.deleteOne(session);
+      const deleted_session = await this.SessionModel.findOneAndDelete(
+        {
+          id: session.id.value, 
+          titleId: session.titleId.toString(),
+        }
+      );
 
       const qosPath = join(
         process.cwd(),
@@ -74,10 +75,10 @@ export default class SessionRepository implements ISessionRepository {
       // Delete QoS data for the session.
       if (existsSync(qosPath)) {
         await unlink(qosPath);
-      }
-    });
+      };
 
-    console.log("Deleted " + sessions.length + " session(s) from " + hostAddress + " - " + macAddress);
+      console.log(`Deleted Session: ${ deleted_session.id } from ${ deleted_session.hostAddress }`);
+    });
   }
 
   public async findSession(titleId: TitleId, id: SessionId) {

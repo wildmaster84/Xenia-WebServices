@@ -70,7 +70,7 @@ export class XNetController {
     try {
       mac = new MacAddress(macAddress);
     } catch (err: unknown) {
-      console.log("Deleting sessions based on IP!");
+      console.log("Deleting session(s) based on IP!");
     }
 
     await this.commandBus.execute(
