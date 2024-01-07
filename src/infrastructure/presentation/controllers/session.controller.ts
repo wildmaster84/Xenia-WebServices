@@ -384,7 +384,7 @@ export class SessionController {
   async qosDownload(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
   ) {
     const path = join(process.cwd(), 'qos', titleId, sessionId);
 
