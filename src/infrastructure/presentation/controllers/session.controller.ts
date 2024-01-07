@@ -384,12 +384,13 @@ export class SessionController {
   async qosDownload(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
-    @Res({ passthrough: true }) res: Response,
+    @Res() res: Response,
   ) {
     const path = join(process.cwd(), 'qos', titleId, sessionId);
 
     if (!existsSync(path)) {
       res.set('Content-Length', '0');
+      res.sendStatus(204);
       return;
     }
 
@@ -398,7 +399,7 @@ export class SessionController {
     if (!stats.isFile()) throw new NotFoundException();
     res.set('Content-Length', stats.size.toString());
     const stream = createReadStream(path);
-    return stream.pipe(res);
+    stream.pipe(res);
   }
 
   @Post('/:sessionId/context')
