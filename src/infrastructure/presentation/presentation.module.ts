@@ -7,6 +7,7 @@ import { XNetController } from './controllers/xnet.controller';
 import { SessionController } from './controllers/session.controller';
 import { PlayerController } from './controllers/player.controller';
 import { LeaderboardsController } from './controllers/leaderboards.controller';
+import { IndexController } from './controllers/index.controller';
 
 @Module({
   imports: [CqrsModule],
@@ -16,6 +17,7 @@ import { LeaderboardsController } from './controllers/leaderboards.controller';
     SessionController,
     PlayerController,
     LeaderboardsController,
+    IndexController,
   ],
   providers: [SessionPresentationMapper],
 })

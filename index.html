@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+div {
+  width: 200px;
+  height: 200px;
+  border: 2px solid black;
+  margin: 10px;
+}
+
+table {
+  table-layout: fixed;
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 80%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<center>
+  <h1>Xenia Web Services</h1>
+  <a href="https://github.com/AdrianCassar/xenia-canary/tree/netplay_canary_experimental" target="_blank">Github</a>
+  <a href="https://github.com/AdrianCassar/xenia-canary/releases" target="_blank">Releases</a>
+
+  <br>
+  <br>
+
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Players</th>
+    </tr>
+    {rows}
+  </table>
+
+  <br>
+  <br>
+
+  <!-- <label>Players Online: {online}</label> -->
+</center>
+
+</body>
+</html>

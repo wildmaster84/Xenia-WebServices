@@ -10,6 +10,7 @@ export default interface ISessionRepository {
     titleId: TitleId,
     resultsCount: number,
   ) => Promise<Session[]>;
+  findAllAdvertisedSessions: () => Promise<Session[]>;
   findSession: (
     titleId: TitleId,
     id: SessionId,

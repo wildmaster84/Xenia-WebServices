@@ -25,6 +25,7 @@ import { FindPlayerSessionQueryHandler } from './queryHandlers/FindPlayerSession
 import { GetPlayerQueryHandler } from './queryHandlers/GetPlayerQueryHandler';
 import { GetSessionsQueryHandler } from './queryHandlers/GetSessionQueryHandler';
 import { SessionSearchQueryHandler } from './queryHandlers/SessionSearchQueryHandler';
+import { AggregateSessionCommandHandler } from './commandHandlers/AggregateSessionCommandHandler';
 
 export const queryHandlers = [
   GetSessionsQueryHandler,
@@ -47,6 +48,7 @@ export const commandHandlers = [
   UpdateLeaderboardCommandHandler,
   MigrateSessionCommandHandler,
   AddSessionContextCommandHandler,
+  AggregateSessionCommandHandler,
 ];
 
 @Module({
