@@ -35,15 +35,25 @@ export class AggregateSessionCommandHandler
     const titles = {};
 
     sessions.forEach(async (session: Session) => {
-      const title =
-        titleIdToTitleMap[session.titleId.toString()] + ' - ' + session.titleId;
+      let title = titleIdToTitleMap[session.titleId.toString()];
+
+      if (title === undefined) {
+        title = session.titleId;
+      } else {
+        title += ' - ' + session.titleId;
+      }
+
       const players = session.players.length;
 
       if (!titles[title]) {
         titles[title] = [];
       }
 
-      titles[title].push({ players: players });
+      const data = {
+        players: players,
+      };
+
+      titles[title].push(data);
     });
 
     return JSON.stringify(titles);

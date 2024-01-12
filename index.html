@@ -2,7 +2,9 @@
 <html>
 <head>
   <title>Xenia Web Services</title>
-
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/xenia-canary/xenia-canary/canary_experimental/assets/icon/1024.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <style>
       body {
           background-color: #181a1b;
@@ -25,6 +27,12 @@
           font-family: arial, sans-serif;
           border-collapse: collapse;
           width: 80%;
+      }
+
+      @media only screen and (max-width: 600px) {
+        table {
+            table-layout: auto;
+        }
       }
 
       td,
@@ -88,8 +96,8 @@
       function HttpGet(url) {
           var xmlHttp = new XMLHttpRequest();
 
-          xmlHttp.open("GET", url, false); // false for synchronous request
-          xmlHttp.send(null);
+          xmlHttp.open("GET", url, false); // Synchronous Request
+          xmlHttp.send();
 
           return xmlHttp;
       }
@@ -97,7 +105,7 @@
       function refreshSessionTable() {
           let sessionData = {};
 
-          const response = HttpGet("https://xenia-netplay-2a0298c0e3f4.herokuapp.com/sessions");
+          const response = HttpGet(window.origin + "/sessions");
 
           if (response.status == 304 || response.status == 200) {
             sessionData = JSON.parse(response.responseText);
