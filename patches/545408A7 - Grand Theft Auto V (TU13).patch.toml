@@ -24,3 +24,13 @@ hash = "829BD9C4A5B1F3C0" # default.xex
     [[patch.be32]]
         address = 0x8272e3b4
         value = 0x60000000
+
+[[patch]]
+    name = "60 FPS"
+    author = "Adrian, illusion"
+    is_enabled = false
+
+    [[patch.be32]]
+        address = 0x82095640
+        # value = 0x3c23d70a    # 50 FPS
+        value = 0x3c000000      # 60 FPS

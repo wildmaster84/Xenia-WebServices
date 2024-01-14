@@ -1,4 +1,11 @@
 { 
+    "connect": [
+        {
+          "info": "Server",
+          "port": 1022,
+          "mappedTo": 1022
+        }
+    ],
     "bind": [
         {
             "info": "Unknown",
