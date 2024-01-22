@@ -4,9 +4,9 @@ function generateSessionsTable(sessionsData) {
   result += '<table>\n';
 
   result += `<tr>\n`;
-  result += `<th>Title</th>\n`;
-  result += `<th>Players</th>\n`;
-  result += `<th id="title_update">Latest TU</th>\n`;
+  result += `<th scope="col">Title</th>\n`;
+  result += `<th scope="col">Players</th>\n`;
+  result += `<th scope="col" id="title_update">Latest TU</th>\n`;
   result += `</tr>\n`;
 
   sessionsData?.Titles?.forEach((titleInfo) => {
@@ -35,8 +35,8 @@ function generateSessionsTable(sessionsData) {
         }
       }
 
-      const icon_asset = titleInfo.icon ? titleInfo.icon : 'assets/icon.png';
-      const icon = `<div class="image"><img src="${icon_asset}" width="64" height="64" onerror="this.src='assets/icon.png';"></div>`;
+      const icon_asset = titleInfo.icon ? titleInfo.icon : '';
+      const icon = `<div class="image"><img src="${icon_asset}" width="64" height="64" alt="${title}" title="${title}" onerror="this.src='assets/icon.svg';"></div>`;
 
       result += `<tr>\n`;
       result += `<td>
@@ -78,30 +78,30 @@ function GetLatestTU(titleInfo, mediaId) {
   return latestTU;
 }
 
-function HttpGet(url) {
-  const xmlHttp = new XMLHttpRequest();
+let table_loaded = false;
 
-  try {
-    xmlHttp.open('GET', url, false); // Synchronous Request
-    xmlHttp.send();
-  } catch (err) {
-    return xmlHttp;
-  }
-
-  return xmlHttp;
-}
-
-function refreshSessionTable() {
+async function refreshSessionTable() {
   let sessionData = {};
 
-  const response = HttpGet(window.origin + '/sessions');
+  const response = await fetch(window.origin + '/sessions');
 
   if (response.status == 304 || response.status == 200) {
-    sessionData = JSON.parse(response.responseText);
+    sessionData = await response.json();
+  } else {
+    console.log(`Error ${response.status}`);
   }
 
-  document.getElementById('sessions').innerHTML =
-    generateSessionsTable(sessionData);
+  const sessionTable = generateSessionsTable(sessionData);
+
+  if (table_loaded) {
+    document.getElementById('sessions').innerHTML = sessionTable;
+  } else {
+    // Animate skeleton loader for 2s on first load
+    setTimeout(() => {
+      document.getElementById('sessions').innerHTML = sessionTable;
+      table_loaded = true;
+    }, 2000);
+  }
 }
 
 let time = 60;
@@ -112,8 +112,7 @@ function refreshTimer() {
     refreshSessionTable();
   }
 
-  document.getElementById('countdown').innerHTML =
-    'Refreshing in ' + time + 's';
+  document.getElementById('countdown').innerHTML = `Refreshing in ${time}s`;
 
   time -= 1;
 }

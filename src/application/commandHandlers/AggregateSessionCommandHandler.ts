@@ -35,7 +35,7 @@ export class AggregateSessionCommandHandler
     const config: AxiosRequestConfig = {
       url: url,
       responseType: type,
-      timeout: 300,
+      timeout: 500,
     };
 
     await axios
@@ -51,6 +51,8 @@ export class AggregateSessionCommandHandler
         } else {
           console.log(`Failed ${url}`);
         }
+
+        console.log(`${error.message}\n`);
       });
 
     return data;

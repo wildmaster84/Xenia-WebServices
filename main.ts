@@ -6,6 +6,7 @@ import * as requestIp from 'request-ip';
 import PresentationSettings from 'src/infrastructure/presentation/settings/PresentationSettings';
 import PersistanceSettings from 'src/infrastructure/persistance/settings/PersistanceSettings';
 import { HttpExceptionFilter } from 'src/application/http-exception.filter';
+import * as compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(XeniaModule, {
@@ -24,6 +25,7 @@ async function bootstrap() {
 
   app.enableCors();
   app.use(requestIp.mw());
+  app.use(compression());
   app.useGlobalFilters(new HttpExceptionFilter());
 
   // Support Heroku
