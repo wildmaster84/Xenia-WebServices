@@ -4,7 +4,9 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AggregateSessionCommand } from 'src/application/commands/AggregateSessionCommand';
 import { Response } from 'express';
 import { join } from 'path';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Frontend')
 @Controller()
 export class IndexController {
   constructor(
