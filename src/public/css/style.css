@@ -16,6 +16,7 @@ a {
 table {
     table-layout: fixed;
     border-collapse: collapse;
+    margin: auto;
     width: 80%;
 }
 

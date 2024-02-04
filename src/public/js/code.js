@@ -19,9 +19,9 @@ function generateSessionsTable(sessionsData) {
     }
 
     for (const session of titleInfo?.sessions) {
-      let Version_Text = session.version ? session.version : 'N/A';
+      let Version_Text = session.version && isValidVersion(session.version) ? session.version : 'N/A';
       let MediaID_Text =
-        session.mediaId && session.mediaId != 0 ? session.mediaId : 'N/A';
+        session.mediaId && session.mediaId != 0 && isHexadecimal(session.mediaId) ? session.mediaId : 'N/A';
 
       let TU_Text = 'N/A';
       let TU_download_url = '#';
@@ -76,6 +76,20 @@ function GetLatestTU(titleInfo, mediaId) {
   });
 
   return latestTU;
+}
+
+function isHexadecimal(s) {
+  try {
+      let value = parseInt(s, 16);
+      return !isNaN(value);
+  } catch (e) {
+      return false;
+  }
+}
+
+function isValidVersion(version) {
+  const expr = new RegExp(/^(\d+\.)?(\d+\.)?(\d+\.)(\d+)$/);
+  return expr.test(version);
 }
 
 let table_loaded = false;
