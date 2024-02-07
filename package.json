@@ -1,7 +1,7 @@
 {
   "name": "xenia-webserver",
-  "version": "0.0.0",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Xenia Web Services is a REST API designed to support the Xenia Xbox 360 emulator in providing online and multiplayer functionality. ",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
