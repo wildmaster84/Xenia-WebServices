@@ -4,7 +4,6 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { XeniaModule } from './src/xenia.module';
 import PresentationSettings from 'src/infrastructure/presentation/settings/PresentationSettings';
 import PersistanceSettings from 'src/infrastructure/persistance/settings/PersistanceSettings';
-import { HttpExceptionFilter } from 'src/application/http-exception.filter';
 import compression from 'compression';
 
 async function bootstrap() {
@@ -24,7 +23,7 @@ async function bootstrap() {
 
   app.enableCors();
   app.use(compression());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalFilters(new HttpExceptionFilter());
 
   // Support Heroku
   const PORT = process.env.PORT || new PresentationSettings().get().port;

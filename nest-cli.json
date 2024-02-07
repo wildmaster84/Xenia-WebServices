@@ -4,7 +4,7 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "assets": [
-      { "include": "public/**/*", "watchAssets": true }
+      { "include": "public/**/*", "outDir": "dist/src", "watchAssets": true }
     ]
   }
 }

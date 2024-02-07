@@ -23,6 +23,9 @@ import { IndexController } from './controllers/index.controller';
 })
 export class PresentationModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(AppLoggerMiddleware).forRoutes('*');
+    consumer
+      .apply(AppLoggerMiddleware)
+      .exclude('/assets/(.*)', '/js/(.*)', '/css/(.*)')
+      .forRoutes('*');
   }
 }

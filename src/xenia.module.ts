@@ -15,8 +15,7 @@ import { join } from 'path';
     PersistanceModule,
     PresentationModule,
     ServeStaticModule.forRoot({
-      serveRoot: '/',
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', 'src/public'),
     }),
   ],
   controllers: [],
