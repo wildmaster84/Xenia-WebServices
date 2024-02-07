@@ -18,15 +18,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      #- uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
       - name: Install
         run: npm install
       - name: Test
         run: npm test
       - name: Build
         run: npm run build
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Xenia-WebServices
           path: dist
