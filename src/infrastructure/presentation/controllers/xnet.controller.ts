@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Inject, Post } from '@nestjs/common';
+import { Controller, Get, Inject } from '@nestjs/common';
 import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';

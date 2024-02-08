@@ -1,8 +1,5 @@
 import { Inject } from '@nestjs/common';
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import IPlayerRepository, {
-  IPlayerRepositorySymbol,
-} from 'src/domain/repositories/IPlayerRepository';
 import ISessionRepository, {
   ISessionRepositorySymbol,
 } from 'src/domain/repositories/ISessionRepository';

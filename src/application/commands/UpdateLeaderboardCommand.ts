@@ -1,6 +1,4 @@
-import Leaderboard, {
-  LeaderboardUpdateProps,
-} from 'src/domain/aggregates/Leaderboard';
+import LeaderboardUpdateProps from 'src/domain/aggregates/Leaderboard';
 import LeaderboardId from 'src/domain/value-objects/LeaderboardId';
 import TitleId from 'src/domain/value-objects/TitleId';
 import Xuid from 'src/domain/value-objects/Xuid';

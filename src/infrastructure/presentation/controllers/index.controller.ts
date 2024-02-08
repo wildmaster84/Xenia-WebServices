@@ -1,4 +1,4 @@
-import { Controller, Inject, Get, Header, Res } from '@nestjs/common';
+import { Controller, Inject, Get, Header } from '@nestjs/common';
 import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AggregateSessionCommand } from 'src/application/commands/AggregateSessionCommand';
