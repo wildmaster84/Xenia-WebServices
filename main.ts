@@ -5,6 +5,7 @@ import { XeniaModule } from './src/xenia.module';
 import PresentationSettings from 'src/infrastructure/presentation/settings/PresentationSettings';
 import PersistanceSettings from 'src/infrastructure/persistance/settings/PersistanceSettings';
 import compression from 'compression';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(XeniaModule, {
@@ -22,6 +23,7 @@ async function bootstrap() {
   }
 
   app.enableCors();
+  app.use(helmet());
   app.use(compression());
   // app.useGlobalFilters(new HttpExceptionFilter());
 
