@@ -21,6 +21,7 @@ This project uses [NestJS](https://nestjs.com/) a Node.js framework using Typesc
   API_PORT=36000
   MONGO_URI=mongodb://127.0.0.1:27017/
   SWAGGER_API=true
+  SSL=true
 ```
 
 ## MongoDB Compass
@@ -31,10 +32,12 @@ This **Xenia Web API** is dependant on a MongoDB database.
 3. The following database structure will be created upon starting the server.
 
 **Database Structure**
-- test
-  - leaderboards
-  - players
-  - sessions
+```
+└─── test
+    │  leaderboards
+    |  players
+    |  sessions
+```
 
 4. Copy the database connection string and set it in the .env file.
 
@@ -42,7 +45,13 @@ This **Xenia Web API** is dependant on a MongoDB database.
 MONGO_URI=mongodb://127.0.0.1:27017/
 ```
 
-5. (Optional) During production you may want to disable Swagger's API.
+5. Toggle [Upgrade-Insecure-Requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade-Insecure-Requests) header. (default **true**)
+
+```
+SSL=true
+```
+
+6. During production you may want to disable Swagger's API.
 
 ```
 SWAGGER_API=false
