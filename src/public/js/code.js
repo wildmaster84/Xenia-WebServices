@@ -42,8 +42,8 @@ function generateSessionsTable(sessionsData) {
         }
       }
 
-      const icon_asset = titleInfo.icon ? titleInfo.icon : '';
-      const icon = `<div class="image"><img src="${icon_asset}" width="64" height="64" alt="${title}" title="${title}" onerror="this.src='assets/icon.svg';"></div>`;
+      const icon_asset = titleInfo.icon ? titleInfo.icon : 'assets/icon.svg';
+      const icon = `<div class="image"><img src="${icon_asset}" width="64" height="64" alt="${title}" title="${title}";"></div>`;
 
       result += `<tr>\n`;
       result += `<td>
@@ -133,9 +133,11 @@ function refreshTimer() {
     refreshSessionTable();
   }
 
-  document.getElementById('countdown').innerHTML = `Refreshing in ${time}s`;
-
-  time -= 1;
+  if (document.readyState == 'complete') {
+    document.getElementById('countdown').innerHTML = `Refreshing in ${time}s`;;
+  
+    time -= 1;
+  }
 }
 
 function setIntervalImmediately(func, interval) {

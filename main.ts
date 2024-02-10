@@ -23,9 +23,14 @@ async function bootstrap() {
   }
 
   app.enableCors();
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        'script-src': ["'self'", "'unsafe-inline'", "'sha256-Zww3/pDgfYVU8OPCr/mr7NFf4ZA0lY1Xeb22wR47e0w='"],
+      },
+    },
+  }));
   app.use(compression());
-  // app.useGlobalFilters(new HttpExceptionFilter());
 
   // Support Heroku
   const PORT = process.env.PORT || new PresentationSettings().get().port;
