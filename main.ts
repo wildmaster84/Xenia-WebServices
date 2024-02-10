@@ -12,7 +12,9 @@ async function bootstrap() {
     rawBody: true,
   });
 
-  if (new PersistanceSettings().get().swagger_API == 'true') {
+  const envs = new PersistanceSettings().get();
+
+  if (envs.swagger_API == 'true') {
     const config = new DocumentBuilder()
       .setTitle('Xenia Web API')
       .setDescription('')
@@ -23,13 +25,21 @@ async function bootstrap() {
   }
 
   app.enableCors();
-  app.use(helmet({
-    contentSecurityPolicy: {
-      directives: {
-        'script-src': ["'self'", "'unsafe-inline'", "'sha256-Zww3/pDgfYVU8OPCr/mr7NFf4ZA0lY1Xeb22wR47e0w='"],
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          'script-src': [
+            "'self'",
+            "'unsafe-inline'",
+            "'sha256-Zww3/pDgfYVU8OPCr/mr7NFf4ZA0lY1Xeb22wR47e0w='",
+          ],
+          upgradeInsecureRequests:
+            envs.SSL == 'true' || envs.SSL == undefined ? [] : null,
+        },
       },
-    },
-  }));
+    }),
+  );
   app.use(compression());
 
   // Support Heroku
