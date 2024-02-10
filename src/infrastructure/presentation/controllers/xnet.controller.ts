@@ -28,8 +28,8 @@ export class XNetController {
   }
 
   @Delete(['/DeleteSessions/:macAddress', '/DeleteSessions'])
-  @ApiQuery({ name: 'hostAddress', description: 'IP Address' })
-  @ApiParam({ name: 'macAddress', description: 'Mac Address' })
+  @ApiQuery({ name: 'hostAddress', description: 'IP Address', required: false })
+  @ApiParam({ name: 'macAddress', description: 'Mac Address', required: false })
   async deleteAllSessions(
     @RealIP() ip: string,
     @Query('hostAddress') hostAddress?: string,

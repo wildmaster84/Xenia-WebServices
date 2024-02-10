@@ -6,6 +6,7 @@ import {
   NotFoundException,
   Param,
   RawBodyRequest,
+  HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import ILogger, { ILoggerSymbol } from '../../../ILogger';
@@ -40,7 +41,6 @@ import Player from 'src/domain/aggregates/Player';
 import { GetPlayerQuery } from 'src/application/queries/GetPlayerQuery';
 import { FindPlayerQuery } from 'src/application/queries/FindPlayerQuery';
 import { SetPlayerSessionIdCommand } from 'src/application/commands/SetPlayerSessionIdCommand';
-import Session from 'src/domain/aggregates/Session';
 import { Request, Response } from 'express';
 import { mkdir, stat, writeFile } from 'fs/promises';
 import { join } from 'path';
@@ -72,12 +72,11 @@ export class SessionController {
     @Body() request: CreateSessionRequest,
   ) {
     const flags = new SessionFlags(request.flags);
-    let session: Session;
 
     if (flags.isHost || flags.value == Flags.STATS) {
       console.log('Host creating session: ' + request.sessionId);
 
-      session = await this.commandBus.execute(
+      await this.commandBus.execute(
         new CreateSessionCommand(
           new TitleId(titleId),
           request.title,
@@ -101,31 +100,36 @@ export class SessionController {
         console.log('Updating Stats.');
       }
 
-      try {
-        const player = await this.queryBus.execute(
-          new FindPlayerQuery(new IpAddress(request.hostAddress)),
-        );
+      const player = await this.queryBus.execute(
+        new FindPlayerQuery(new IpAddress(request.hostAddress)),
+      );
+
+      // If player doesn't exists add them to players table
+      if (player) {
         await this.commandBus.execute(
           new SetPlayerSessionIdCommand(
             player.xuid,
             new SessionId(request.sessionId),
           ),
         );
-      } catch (error) {
-        console.log('BAD PLAYER ' + request.hostAddress);
-        console.log(session);
+      } else {
+        console.log(`Player not found: ${request.hostAddress}`);
+
+        throw new HttpException('Unknown Player', HttpStatus.BAD_REQUEST);
       }
     } else {
-      console.log('Peer joining session ' + request.sessionId);
+      console.log(`Peer joining session: ${request.sessionId}`);
 
-      const sessionQuery = new GetSessionQuery(
-        new TitleId(titleId),
-        new SessionId(request.sessionId),
+      const session = await this.queryBus.execute(
+        new GetSessionQuery(
+          new TitleId(titleId),
+          new SessionId(request.sessionId),
+        ),
       );
 
-      console.log(sessionQuery);
-
-      session = await this.queryBus.execute(sessionQuery);
+      if (!session) {
+        console.log(`Session ${request.sessionId} doesn't exist!`);
+      }
     }
   }
 
