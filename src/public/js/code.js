@@ -134,8 +134,8 @@ function refreshTimer() {
   }
 
   if (document.readyState == 'complete') {
-    document.getElementById('countdown').innerHTML = `Refreshing in ${time}s`;;
-  
+    document.getElementById('countdown').innerHTML = `Refreshing in ${time}s`;
+
     time -= 1;
   }
 }
