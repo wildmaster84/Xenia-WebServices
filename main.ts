@@ -6,8 +6,11 @@ import PresentationSettings from 'src/infrastructure/presentation/settings/Prese
 import PersistanceSettings from 'src/infrastructure/persistance/settings/PersistanceSettings';
 import compression from 'compression';
 import helmet from 'helmet';
+import { ConsoleLogger } from '@nestjs/common';
 
 async function bootstrap() {
+  const logger = new ConsoleLogger('Main');
+
   const app = await NestFactory.create(XeniaModule, {
     rawBody: true,
   });
@@ -47,6 +50,6 @@ async function bootstrap() {
 
   await app.listen(PORT);
 
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  logger.debug(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

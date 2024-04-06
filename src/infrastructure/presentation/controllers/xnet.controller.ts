@@ -1,5 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
+import { ConsoleLogger, Controller, Get } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Delete, Param, Query } from '@nestjs/common/decorators';
@@ -13,10 +12,12 @@ import { ProcessClientAddressCommand } from 'src/application/commands/ProcessCli
 @Controller()
 export class XNetController {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-  ) {}
+  ) {
+    this.logger.setContext(XNetController.name);
+  }
 
   @Get('/whoami')
   async getClientAddress(@RealIP() ip: string) {
@@ -44,7 +45,7 @@ export class XNetController {
     try {
       mac = new MacAddress(macAddress);
     } catch (err: unknown) {
-      console.log('Deleting session(s) based on IP!');
+      this.logger.debug('Deleting session(s) based on IP!');
     }
 
     await this.commandBus.execute(

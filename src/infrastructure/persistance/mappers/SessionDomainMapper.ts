@@ -1,7 +1,6 @@
 import { Session as SessionModel } from '../models/SessionSchema';
 import Session from '../../../domain/aggregates/Session';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
-import { Inject, Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import TitleId from 'src/domain/value-objects/TitleId';
 import IpAddress from 'src/domain/value-objects/IpAddress';
 import SessionFlags from 'src/domain/value-objects/SessionFlags';
@@ -11,7 +10,7 @@ import SessionId from 'src/domain/value-objects/SessionId';
 
 @Injectable()
 export default class SessionDomainMapper {
-  constructor(@Inject(ILoggerSymbol) private readonly logger: ILogger) {}
+  constructor(private readonly logger: ConsoleLogger) {}
 
   public mapToDomainModel(session: SessionModel): Session {
     return new Session({

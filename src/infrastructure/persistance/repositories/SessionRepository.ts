@@ -1,11 +1,10 @@
 import { Model } from 'mongoose';
-import { Inject, Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { existsSync } from 'fs';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
 import { SessionDocument } from '../models/SessionSchema';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import ISessionRepository from 'src/domain/repositories/ISessionRepository';
 import Session from 'src/domain/aggregates/Session';
 import SessionDomainMapper from '../mappers/SessionDomainMapper';
@@ -19,12 +18,14 @@ import MacAddress from 'src/domain/value-objects/MacAddress';
 @Injectable()
 export default class SessionRepository implements ISessionRepository {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     @InjectModel(Session.name)
     private SessionModel: Model<SessionDocument>,
     private readonly sessionDomainMapper: SessionDomainMapper,
     private readonly sessionPersistanceMapper: SessionPersistanceMapper,
-  ) {}
+  ) {
+    this.logger.setContext(SessionRepository.name);
+  }
 
   public async save(session: Session) {
     await this.SessionModel.findOneAndUpdate(
@@ -53,7 +54,7 @@ export default class SessionRepository implements ISessionRepository {
 
   public async deleteSessions(sessions: Session[]) {
     if (sessions.length <= 0) {
-      console.log('Sessions already deleted.');
+      this.logger.debug('Sessions already deleted.');
       return;
     }
 
@@ -75,7 +76,7 @@ export default class SessionRepository implements ISessionRepository {
         await unlink(qosPath);
       }
 
-      console.log(
+      this.logger.debug(
         `Deleted Session: ${session.id.value} from ${session.hostAddress.value}`,
       );
     });

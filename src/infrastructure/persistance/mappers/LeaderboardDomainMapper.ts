@@ -1,14 +1,13 @@
 import { Leaderboard as LeaderboardModel } from '../models/LeaderboardSchema';
 import Leaderboard from '../../../domain/aggregates/Leaderboard';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
-import { Inject, Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import TitleId from 'src/domain/value-objects/TitleId';
 import Xuid from 'src/domain/value-objects/Xuid';
 import LeaderboardId from 'src/domain/value-objects/LeaderboardId';
 
 @Injectable()
 export default class LeaderboardDomainMapper {
-  constructor(@Inject(ILoggerSymbol) private readonly logger: ILogger) {}
+  constructor(private readonly logger: ConsoleLogger) {}
 
   public mapToDomainModel(leaderboard: LeaderboardModel): Leaderboard {
     return new Leaderboard({

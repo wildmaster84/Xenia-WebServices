@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { ConsoleLogger, Inject } from '@nestjs/common';
 import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { existsSync } from 'fs';
 import { unlink } from 'fs/promises';
@@ -19,7 +19,10 @@ export class DeleteSessionCommandHandler
   constructor(
     @Inject(ISessionRepositorySymbol)
     private repository: ISessionRepository,
-  ) {}
+    private readonly logger: ConsoleLogger,
+  ) {
+    logger.setContext(DeleteSessionCommandHandler.name);
+  }
 
   async execute(command: DeleteSessionCommand) {
     const session = await this.repository.findSession(
@@ -45,7 +48,7 @@ export class DeleteSessionCommandHandler
       if (existsSync(qosPath)) {
         await unlink(qosPath);
 
-        console.log(`Soft Deleted Session: ${session.id.value}`);
+        this.logger.debug(`Soft Deleted Session: ${session.id.value}`);
       }
     }
   }
@@ -58,7 +61,10 @@ export class DeleteSessionsCommandHandler
   constructor(
     @Inject(ISessionRepositorySymbol)
     private repository: ISessionRepository,
-  ) {}
+    private readonly logger: ConsoleLogger,
+  ) {
+    logger.setContext(DeleteSessionsCommand.name);
+  }
 
   async execute(command: DeleteSessionsCommand) {
     let msg = 'Deleting all session(s) from ' + command.hostAddress.value;
@@ -67,7 +73,7 @@ export class DeleteSessionsCommandHandler
       msg += ' - ' + command.macAddress.value.toString();
     }
 
-    console.log(msg);
+    this.logger.debug(msg);
 
     const sessions = await this.repository.findSessionsByIPAndMac(
       command.hostAddress,

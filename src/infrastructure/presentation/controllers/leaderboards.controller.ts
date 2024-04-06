@@ -1,5 +1,4 @@
-import { Controller, Inject, Post, Body } from '@nestjs/common';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
+import { Controller, Post, Body, ConsoleLogger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import Xuid from 'src/domain/value-objects/Xuid';
@@ -15,16 +14,19 @@ import LeaderboardStatId from 'src/domain/value-objects/LeaderboardStatId';
 @Controller()
 export class LeaderboardsController {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-  ) {}
+  ) {
+    this.logger.setContext(LeaderboardsController.name);
+  }
 
   @Post('/find')
   async findPlayer(
     @Body() request: FindLeaderboardsRequest,
   ): Promise<FindLeaderboardsResponse> {
-    console.log(JSON.stringify(request));
+    this.logger.verbose('\n' + JSON.stringify(request));
+
     return await this.queryBus.execute(
       new FindLeaderboardsQuery(
         request.players.map((player) => new Xuid(player)),

@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { ConsoleLogger, Inject } from '@nestjs/common';
 import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { AggregateSessionCommand } from '../commands/AggregateSessionCommand';
 import ISessionRepository, {
@@ -16,7 +16,10 @@ export class AggregateSessionCommandHandler
   constructor(
     @Inject(ISessionRepositorySymbol)
     private repository: ISessionRepository,
-  ) {}
+    private readonly logger: ConsoleLogger,
+  ) {
+    logger.setContext(AggregateSessionCommand.name);
+  }
 
   async downloadImageAsBase64(url: string): Promise<string> {
     const response = await this.downloadContent(url, 'arraybuffer');
@@ -43,16 +46,16 @@ export class AggregateSessionCommandHandler
       .then((response) => {
         data = response.data;
       })
-      .catch(function (error) {
+      .catch((error) => {
         if (error.response) {
-          console.log(`Failed ${url}`);
+          this.logger.error(`Failed ${url}`);
         } else if (error.request) {
-          console.log(`Failed ${url}`);
+          this.logger.error(`Failed ${url}`);
         } else {
-          console.log(`Failed ${url}`);
+          this.logger.error(`Failed ${url}`);
         }
 
-        console.log(`${error.message}\n`);
+        this.logger.error(`${error.message}\n`);
       });
 
     return data;
@@ -127,8 +130,8 @@ export class AggregateSessionCommandHandler
       titles['Titles'][index]['sessions'].push(data);
     }
 
-    console.log(`Icon Cache Size: ${icon_cache.size}`);
-    console.log(`Title Info Cache Size: ${title_info_cache.size}`);
+    this.logger.debug(`Icon Cache Size: ${icon_cache.size}`);
+    this.logger.debug(`Title Info Cache Size: ${title_info_cache.size}`);
 
     return JSON.stringify(titles);
   }

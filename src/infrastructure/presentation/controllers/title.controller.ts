@@ -1,5 +1,11 @@
-import { Controller, Get, Header, Inject, Param, Res } from '@nestjs/common';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
+import {
+  ConsoleLogger,
+  Controller,
+  Get,
+  Header,
+  Param,
+  Res,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { join } from 'path';
@@ -11,10 +17,12 @@ import { existsSync } from 'fs';
 @Controller('/title/:titleId')
 export class TitleController {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-  ) {}
+  ) {
+    this.logger.setContext(TitleController.name);
+  }
 
   @Get('/servers')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })

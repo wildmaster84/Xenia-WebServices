@@ -2,14 +2,13 @@ import {
   Controller,
   Get,
   Delete,
-  Inject,
   NotFoundException,
   Param,
   RawBodyRequest,
   HttpException,
   HttpStatus,
+  ConsoleLogger,
 } from '@nestjs/common';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import TitleId from 'src/domain/value-objects/TitleId';
@@ -59,11 +58,13 @@ import { ProcessClientAddressCommand } from 'src/application/commands/ProcessCli
 @Controller('/title/:titleId/sessions')
 export class SessionController {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly sessionMapper: SessionPresentationMapper,
-  ) {}
+  ) {
+    this.logger.setContext(SessionController.name);
+  }
 
   @Post()
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
@@ -74,7 +75,7 @@ export class SessionController {
     const flags = new SessionFlags(request.flags);
 
     if (flags.isHost || flags.value == Flags.STATS) {
-      console.log('Host creating session: ' + request.sessionId);
+      this.logger.debug('Host creating session: ' + request.sessionId);
 
       await this.commandBus.execute(
         new CreateSessionCommand(
@@ -93,11 +94,11 @@ export class SessionController {
       );
 
       if (flags.value == Flags.STATS) {
-        console.log('Updating Stats.');
+        this.logger.debug('Updating Stats.');
       }
 
       if (flags.value == Flags.STATS + Flags.HOST) {
-        console.log('Updating Stats.');
+        this.logger.debug('Updating Stats.');
       }
 
       const player = await this.queryBus.execute(
@@ -113,12 +114,12 @@ export class SessionController {
           ),
         );
       } else {
-        console.log(`Player not found: ${request.hostAddress}`);
+        this.logger.debug(`Player not found: ${request.hostAddress}`);
 
         throw new HttpException('Unknown Player', HttpStatus.BAD_REQUEST);
       }
     } else {
-      console.log(`Peer joining session: ${request.sessionId}`);
+      this.logger.debug(`Peer joining session: ${request.sessionId}`);
 
       const session = await this.queryBus.execute(
         new GetSessionQuery(
@@ -128,7 +129,7 @@ export class SessionController {
       );
 
       if (!session) {
-        console.log(`Session ${request.sessionId} doesn't exist!`);
+        this.logger.debug(`Session ${request.sessionId} doesn't exist!`);
       }
     }
   }
@@ -197,15 +198,15 @@ export class SessionController {
     );
 
     if (!session) {
-      console.log(`Session ${sessionId} is already deleted`);
+      this.logger.debug(`Session ${sessionId} is already deleted`);
       return;
     }
 
     if (session.hostAddress.value !== ipv4) {
-      console.log(
+      this.logger.debug(
         `Client ${ipv4} attempted to delete session created by ${session.hostAddress.value}`,
       );
-      console.log(`Session ${sessionId} will not be deleted`);
+      this.logger.debug(`Session ${sessionId} will not be deleted`);
       return;
     }
 
@@ -376,10 +377,10 @@ export class SessionController {
     const qosPath = join(process.cwd(), 'qos', titleId, sessionId);
 
     if (existsSync(qosPath)) {
-      console.log('Updating QoS Data.');
+      this.logger.debug('Updating QoS Data.');
     } else {
       await mkdir(join(process.cwd(), 'qos', titleId), { recursive: true });
-      console.log('Saving QoS Data.');
+      this.logger.debug('Saving QoS Data.');
     }
 
     // always write QoS data to ensure data is updated.
@@ -456,7 +457,9 @@ export class SessionController {
     @Param('sessionId') sessionId: string,
     @Body() request: WriteStatsRequest,
   ) {
-    console.log({ request: JSON.stringify(request) });
+    this.logger.verbose(
+      '\n' + JSON.stringify({ request: JSON.stringify(request) }),
+    );
 
     const statsConfigPath = join(
       process.cwd(),
@@ -466,7 +469,7 @@ export class SessionController {
     );
 
     if (!existsSync(statsConfigPath)) {
-      console.warn(
+      this.logger.warn(
         `No stats config found for title ${titleId}, unable to save stats.`,
       );
 
@@ -486,7 +489,7 @@ export class SessionController {
               propertyMappings[new PropertyId(propId).toString()];
 
             if (propertyMapping == undefined) {
-              console.warn('UNKNOWN STAT ID FOR PROPERTY ' + propId);
+              this.logger.warn('UNKNOWN STAT ID FOR PROPERTY ' + propId);
               return;
             }
 

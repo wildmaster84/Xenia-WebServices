@@ -1,5 +1,4 @@
-import { Controller, Inject, Get, Header } from '@nestjs/common';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
+import { Controller, Get, Header, ConsoleLogger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AggregateSessionCommand } from 'src/application/commands/AggregateSessionCommand';
 import { ApiTags } from '@nestjs/swagger';
@@ -8,10 +7,12 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller()
 export class IndexController {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-  ) {}
+  ) {
+    this.logger.setContext(IndexController.name);
+  }
 
   @Get('/sessions')
   @Header('content-type', 'application/json')

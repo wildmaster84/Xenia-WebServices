@@ -1,11 +1,10 @@
 import {
   Controller,
-  Inject,
   Post,
   Body,
   NotFoundException,
+  ConsoleLogger,
 } from '@nestjs/common';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import { CreatePlayerCommand } from 'src/application/commands/CreatePlayerCommand';
@@ -27,10 +26,12 @@ import type { PlayerResponse } from 'src/infrastructure/presentation/responses/P
 @Controller()
 export class PlayerController {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-  ) {}
+  ) {
+    this.logger.setContext(PlayerController.name);
+  }
 
   @Post()
   async createPlayer(@Body() request: CreatePlayerRequest) {
@@ -48,7 +49,8 @@ export class PlayerController {
   async findPlayer(
     @Body() request: FindPlayerRequest,
   ): Promise<PlayerResponse> {
-    console.log(request);
+    this.logger.verbose('\n' + JSON.stringify(request, null, 2));
+
     const player = await this.queryBus.execute(
       new FindPlayerQuery(new IpAddress(request.hostAddress)),
     );

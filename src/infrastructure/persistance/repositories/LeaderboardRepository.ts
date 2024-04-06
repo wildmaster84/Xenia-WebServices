@@ -1,7 +1,6 @@
 import { Model } from 'mongoose';
-import { Inject, Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import ILeaderboardRepository from 'src/domain/repositories/ILeaderboardRepository';
 import Leaderboard from 'src/domain/aggregates/Leaderboard';
 import LeaderboardDomainMapper from '../mappers/LeaderboardDomainMapper';
@@ -14,12 +13,14 @@ import Xuid from 'src/domain/value-objects/Xuid';
 @Injectable()
 export default class LeaderboardRepository implements ILeaderboardRepository {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     @InjectModel(Leaderboard.name)
     private LeaderboardModel: Model<LeaderboardDocument>,
     private readonly leaderboardDomainMapper: LeaderboardDomainMapper,
     private readonly leaderboardPersistanceMapper: LeaderboardPersistanceMapper,
-  ) {}
+  ) {
+    this.logger.setContext(LeaderboardRepository.name);
+  }
 
   public async save(leaderboard: Leaderboard) {
     await this.LeaderboardModel.findOneAndUpdate(

@@ -1,7 +1,6 @@
 import { Model } from 'mongoose';
-import { Inject, Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import ILogger, { ILoggerSymbol } from '../../../ILogger';
 import IPlayerRepository from 'src/domain/repositories/IPlayerRepository';
 import Player from 'src/domain/aggregates/Player';
 import PlayerDomainMapper from '../mappers/PlayerDomainMapper';
@@ -13,12 +12,14 @@ import IpAddress from 'src/domain/value-objects/IpAddress';
 @Injectable()
 export default class PlayerRepository implements IPlayerRepository {
   constructor(
-    @Inject(ILoggerSymbol) private readonly logger: ILogger,
+    private readonly logger: ConsoleLogger,
     @InjectModel(Player.name)
     private PlayerModel: Model<PlayerDocument>,
     private readonly playerDomainMapper: PlayerDomainMapper,
     private readonly playerPersistanceMapper: PlayerPersistanceMapper,
-  ) {}
+  ) {
+    this.logger.setContext(PlayerRepository.name);
+  }
 
   public async save(player: Player) {
     await this.PlayerModel.findOneAndUpdate(

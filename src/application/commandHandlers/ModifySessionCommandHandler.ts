@@ -15,7 +15,6 @@ export class ModifySessionCommandHandler
   ) {}
 
   async execute(command: ModifySessionCommand) {
-    console.log(command);
     const session = await this.repository.findSession(
       command.titleId,
       command.sessionId,

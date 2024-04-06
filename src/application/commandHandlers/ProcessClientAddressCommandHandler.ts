@@ -1,12 +1,15 @@
 import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { ProcessClientAddressCommand } from '../commands/ProcessClientAddressCommand';
 import ipaddr from 'ipaddr.js';
+import { ConsoleLogger } from '@nestjs/common';
 
 @CommandHandler(ProcessClientAddressCommand)
 export class ProcessClientAddressCommandHandler
   implements ICommandHandler<ProcessClientAddressCommand>
 {
-  constructor() {}
+  constructor(private readonly logger: ConsoleLogger) {
+    logger.setContext(ProcessClientAddressCommand.name);
+  }
 
   async execute(command: ProcessClientAddressCommand) {
     let ipv4 = command.ip;
@@ -16,7 +19,7 @@ export class ProcessClientAddressCommandHandler
 
     // Use Dynamic Import of ESM
     await import('private-ip').then((is_ip_private) => {
-      console.log(
+      this.logger.debug(
         `${is_ip_private.default(ipv4) ? 'Private' : 'Public'} IPv4: ${ipv4}`,
       );
     });

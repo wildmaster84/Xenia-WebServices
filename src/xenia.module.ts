@@ -1,7 +1,6 @@
-import { Module, Global, ConsoleLogger } from '@nestjs/common';
+import { Module, Global, ConsoleLogger, Scope } from '@nestjs/common';
 import { ApplicationModule } from './application/application.module';
 import { DomainModule } from './domain/domain.module';
-import { ILoggerSymbol } from './ILogger';
 import { PersistanceModule } from './infrastructure/persistance/persistance.module';
 import { PresentationModule } from './infrastructure/presentation/presentation.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -19,7 +18,14 @@ import { join } from 'path';
     }),
   ],
   controllers: [],
-  providers: [{ provide: ILoggerSymbol, useClass: ConsoleLogger }],
-  exports: [ILoggerSymbol],
+  providers: [
+    {
+      provide: ConsoleLogger,
+      useClass: ConsoleLogger,
+      // Due to transient scope, each controller will have its own unique instance of ConsoleLogger.
+      scope: Scope.TRANSIENT,
+    },
+  ],
+  exports: [ConsoleLogger],
 })
 export class XeniaModule {}
