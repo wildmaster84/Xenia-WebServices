@@ -4,7 +4,6 @@ import SessionFlags from '../value-objects/SessionFlags';
 import SessionId from '../value-objects/SessionId';
 import TitleId from '../value-objects/TitleId';
 import Xuid from '../value-objects/Xuid';
-import * as crypto from 'crypto';
 
 interface SessionProps {
   id: SessionId;
@@ -79,18 +78,23 @@ export default class Session {
     });
   }
 
-  static randomSessionId() {
-    const bytesHex = crypto
-      .randomBytes(8)
-      .reduce((o, v) => o + ('00' + v.toString(16)).slice(-2), '');
+  static GenerateSessionId() {
+    const rnd_value = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 
-    return bytesHex;
+    const session_id_value =
+      (BigInt(0xae) << BigInt(56)) |
+      (BigInt(rnd_value) & BigInt(0x0000ffffffffffff));
+
+    const id_hex_string = session_id_value.toString(16);
+    const session_id = id_hex_string.padEnd(16, '0');
+
+    return session_id;
   }
 
   public static createMigration(props: CreateMigrationProps) {
     const newSession = new Session({
       ...props.session.props,
-      id: new SessionId(this.randomSessionId()),
+      id: new SessionId(this.GenerateSessionId()),
       hostAddress: props.hostAddress,
       macAddress: props.macAddress,
       port: props.port,
