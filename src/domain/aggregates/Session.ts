@@ -113,7 +113,7 @@ export default class Session {
   }
 
   public modify(props: ModifyProps) {
-    this.props.flags = this.flags.modify(props.flags);
+    this.props.flags = props.flags;
     this.props.privateSlotsCount = props.privateSlotsCount;
     this.props.publicSlotsCount = props.publicSlotsCount;
   }

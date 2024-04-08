@@ -17,7 +17,7 @@ import { CreateSessionRequest } from '../requests/CreateSessionRequest';
 import { CreateSessionCommand } from 'src/application/commands/CreateSessionCommand';
 import SessionId from 'src/domain/value-objects/SessionId';
 import IpAddress from 'src/domain/value-objects/IpAddress';
-import SessionFlags, { Flags } from 'src/domain/value-objects/SessionFlags';
+import SessionFlags from 'src/domain/value-objects/SessionFlags';
 import { GetSessionQuery } from 'src/application/queries/GetSessionQuery';
 import { SessionSearchQuery } from 'src/application/queries/SessionSearchQuery';
 import SessionPresentationMapper from '../mappers/SessionPresentationMapper';
@@ -75,7 +75,7 @@ export class SessionController {
   ) {
     const flags = new SessionFlags(request.flags);
 
-    if (flags.isHost || flags.value == Flags.STATS) {
+    if (flags.isHost) {
       this.logger.debug('Host creating session: ' + request.sessionId);
 
       await this.commandBus.execute(
@@ -94,11 +94,7 @@ export class SessionController {
         ),
       );
 
-      if (flags.value == Flags.STATS) {
-        this.logger.debug('Updating Stats.');
-      }
-
-      if (flags.value == Flags.STATS + Flags.HOST) {
+      if (flags.isStatsSession) {
         this.logger.debug('Updating Stats.');
       }
 
