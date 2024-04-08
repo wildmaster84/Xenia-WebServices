@@ -38,7 +38,9 @@ export class TitleController {
       'servers.json',
     );
 
-    if (!existsSync(path)) return [];
+    if (!existsSync(path)) {
+      return [];
+    }
 
     const stats = await stat(path);
 
@@ -66,7 +68,9 @@ export class TitleController {
       `${serviceId}.json`,
     );
 
-    if (!existsSync(path)) return [];
+    if (!existsSync(path)) {
+      return [];
+    }
 
     const stats = await stat(path);
 
@@ -91,7 +95,9 @@ export class TitleController {
       'ports.json',
     );
 
-    if (!existsSync(path)) return {};
+    if (!existsSync(path)) {
+      return {};
+    }
 
     const stats = await stat(path);
 

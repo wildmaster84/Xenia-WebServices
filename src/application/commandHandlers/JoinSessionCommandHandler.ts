@@ -20,10 +20,16 @@ export class JoinSessionCommandHandler
       command.sessionId,
     );
 
+    if (!session) {
+      return undefined;
+    }
+
     session.join({
       xuids: command.xuids,
     });
 
     await this.repository.save(session);
+
+    return session;
   }
 }

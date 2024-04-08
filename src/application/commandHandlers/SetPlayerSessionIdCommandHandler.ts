@@ -16,6 +16,11 @@ export class SetPlayerSessionIdCommandHandler
 
   async execute(command: SetPlayerSessionIdCommand) {
     const player = await this.repository.findByXuid(command.xuid);
+
+    if (!player) {
+      return undefined;
+    }
+
     player.setSession(command.sessionId);
     await this.repository.save(player);
   }

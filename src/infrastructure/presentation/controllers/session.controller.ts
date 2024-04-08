@@ -129,7 +129,7 @@ export class SessionController {
       );
 
       if (!session) {
-        this.logger.debug(`Session ${request.sessionId} doesn't exist!`);
+        this.logger.debug(`Session ${request.sessionId} was not found.`);
       }
     }
   }
@@ -146,7 +146,7 @@ export class SessionController {
     );
 
     if (!session) {
-      throw new NotFoundException('Session not found.');
+      throw new NotFoundException(`Session ${sessionId} was not found.`);
     }
 
     return this.sessionMapper.mapToPresentationModel(session);
@@ -165,7 +165,7 @@ export class SessionController {
     );
 
     if (!session) {
-      throw new NotFoundException('Session not found.');
+      throw new NotFoundException(`Session ${sessionId} was not found.`);
     }
 
     const newSession = await this.commandBus.execute(
@@ -198,7 +198,7 @@ export class SessionController {
     );
 
     if (!session) {
-      this.logger.debug(`Session ${sessionId} is already deleted`);
+      this.logger.debug(`Session ${sessionId} is already deleted.`);
       return;
     }
 
@@ -206,16 +206,19 @@ export class SessionController {
       this.logger.debug(
         `Client ${ipv4} attempted to delete session created by ${session.hostAddress.value}`,
       );
-      this.logger.debug(`Session ${sessionId} will not be deleted`);
+      this.logger.debug(`Session ${sessionId} will not be deleted.`);
       return;
     }
 
-    await this.commandBus.execute(
+    const result = await this.commandBus.execute(
       new DeleteSessionCommand(new TitleId(titleId), new SessionId(sessionId)),
     );
+
+    if (result) {
+      throw new NotFoundException(`Failed to delete session ${sessionId}.`);
+    }
   }
 
-  // 🌈🌈🌈 This fabulous function is here to slay! Yasss queen! 💅💅💅
   @Get('/:sessionId/details')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
   @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
@@ -228,11 +231,9 @@ export class SessionController {
     );
 
     if (!session) {
-      throw new NotFoundException('Session not found.');
+      throw new NotFoundException(`Session ${sessionId} was not found.`);
     }
 
-    // TODO: I think there should be more in here but I haven't worked it out yet.
-    // Also, the host flag should probably be unset if requested by a peer.
     return {
       id: session.id.value,
       flags: session.flags.value,
@@ -261,7 +262,7 @@ export class SessionController {
     );
 
     if (!session) {
-      throw new NotFoundException('Session not found.');
+      throw new NotFoundException(`Session ${sessionId} was not found.`);
     }
 
     const players: Player[] = await Promise.all(
@@ -271,12 +272,15 @@ export class SessionController {
     );
 
     const machinePlayers = {};
+
     players
       .filter((player) => player != undefined)
       .forEach((player) => {
-        if (machinePlayers[player.machineId.value] !== undefined)
+        if (machinePlayers[player.machineId.value] !== undefined) {
           machinePlayers[player.machineId.value].push(player);
-        else machinePlayers[player.machineId.value] = [player];
+        } else {
+          machinePlayers[player.machineId.value] = [player];
+        }
       });
 
     const machines: SessionArbitrationResponse['machines'] = [];
@@ -304,7 +308,7 @@ export class SessionController {
     @Param('sessionId') sessionId: string,
     @Body() request: ModifySessionRequest,
   ) {
-    await this.commandBus.execute(
+    const session = await this.commandBus.execute(
       new ModifySessionCommand(
         new TitleId(titleId),
         new SessionId(sessionId),
@@ -313,6 +317,12 @@ export class SessionController {
         request.privateSlotsCount,
       ),
     );
+
+    if (!session) {
+      throw new NotFoundException(
+        `Failed to modify session ${sessionId} was not found.`,
+      );
+    }
   }
 
   @Post('/:sessionId/join')
@@ -323,13 +333,20 @@ export class SessionController {
     @Param('sessionId') sessionId: string,
     @Body() request: JoinSessionRequest,
   ) {
-    await this.commandBus.execute(
+    const session = await this.commandBus.execute(
       new JoinSessionCommand(
         new TitleId(titleId),
         new SessionId(sessionId),
         request.xuids.map((xuid) => new Xuid(xuid)),
       ),
     );
+
+    if (!session) {
+      const error_msg = `Failed to join session ${sessionId} was not found.`;
+      this.logger.debug(error_msg);
+
+      throw new NotFoundException(error_msg);
+    }
   }
 
   @Post('/:sessionId/leave')
@@ -340,13 +357,20 @@ export class SessionController {
     @Param('sessionId') sessionId: string,
     @Body() request: LeaveSessionRequest,
   ) {
-    await this.commandBus.execute(
+    const session = await this.commandBus.execute(
       new LeaveSessionCommand(
         new TitleId(titleId),
         new SessionId(sessionId),
         request.xuids.map((xuid) => new Xuid(xuid)),
       ),
     );
+
+    if (!session) {
+      const error_msg = `Failed to leave session ${sessionId} was not found.`;
+      this.logger.debug(error_msg);
+
+      throw new NotFoundException(error_msg);
+    }
   }
 
   @Post('/search')
@@ -405,7 +429,9 @@ export class SessionController {
 
     const stats = await stat(path);
 
-    if (!stats.isFile()) throw new NotFoundException();
+    if (!stats.isFile()) {
+      throw new NotFoundException(`QoS data at ${path} not found.`);
+    }
 
     res.set('Content-Length', stats.size.toString());
     const stream = createReadStream(path);
@@ -420,13 +446,17 @@ export class SessionController {
     @Param('sessionId') sessionId: string,
     @Body() request: GetSessionContextRequest,
   ) {
-    await this.commandBus.execute(
+    const session = await this.commandBus.execute(
       new AddSessionContextCommand(
         new TitleId(titleId),
         new SessionId(sessionId),
         request.contexts,
       ),
     );
+
+    if (!session) {
+      throw new NotFoundException(`Session ${sessionId} was not found.`);
+    }
   }
 
   @Get('/:sessionId/context')
@@ -441,7 +471,7 @@ export class SessionController {
     );
 
     if (!session) {
-      throw new NotFoundException('Session not found.');
+      throw new NotFoundException(`Session ${sessionId} was not found.`);
     }
 
     return {
@@ -488,7 +518,7 @@ export class SessionController {
             const propertyMapping =
               propertyMappings[new PropertyId(propId).toString()];
 
-            if (propertyMapping == undefined) {
+            if (!propertyMapping) {
               this.logger.warn('UNKNOWN STAT ID FOR PROPERTY ' + propId);
               return;
             }

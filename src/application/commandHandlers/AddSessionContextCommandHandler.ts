@@ -20,7 +20,13 @@ export class AddSessionContextCommandHandler
       command.sessionId,
     );
 
+    if (!session) {
+      return undefined;
+    }
+
     session.addContext({ context: command.contexts });
     await this.repository.save(session);
+
+    return session;
   }
 }

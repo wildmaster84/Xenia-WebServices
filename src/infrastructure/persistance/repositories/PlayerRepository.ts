@@ -39,7 +39,9 @@ export default class PlayerRepository implements IPlayerRepository {
       xuid: xuid.value,
     });
 
-    if (!player) return undefined;
+    if (!player) {
+      return undefined;
+    }
 
     return this.playerDomainMapper.mapToDomainModel(player);
   }
@@ -49,7 +51,9 @@ export default class PlayerRepository implements IPlayerRepository {
       hostAddress: ip.value,
     });
 
-    if (!player) return undefined;
+    if (!player) {
+      return undefined;
+    }
 
     return this.playerDomainMapper.mapToDomainModel(player);
   }

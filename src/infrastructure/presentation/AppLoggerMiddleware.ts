@@ -17,6 +17,7 @@ export class AppLoggerMiddleware implements NestMiddleware {
 
     response.on('close', () => {
       const { statusCode } = response;
+
       const headers_JSON = JSON.stringify(headers);
 
       this.logger.log(

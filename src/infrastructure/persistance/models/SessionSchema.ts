@@ -38,7 +38,13 @@ export class Session {
   @Prop({ required: false })
   migration: string;
 
-  @Prop({ type: Date, expires: 60 * 60, required: true })
+  // How long until Mongodb will automatically delete the document from the collection.
+  // Mongodb will check every minute.
+  @Prop({
+    type: Date,
+    expires: '1h',
+    required: true,
+  })
   updatedAt: Date;
 }
 

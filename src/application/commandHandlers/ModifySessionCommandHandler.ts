@@ -20,6 +20,10 @@ export class ModifySessionCommandHandler
       command.sessionId,
     );
 
+    if (!session) {
+      return undefined;
+    }
+
     session.modify({
       flags: command.flags,
       privateSlotsCount: command.privateSlotsCount,
@@ -27,5 +31,7 @@ export class ModifySessionCommandHandler
     });
 
     await this.repository.save(session);
+
+    return session;
   }
 }

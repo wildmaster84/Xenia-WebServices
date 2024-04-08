@@ -20,12 +20,16 @@ export class LeaveSessionCommandHandler
       command.sessionId,
     );
 
-    if (session == undefined) return;
+    if (!session) {
+      return undefined;
+    }
 
     session.leave({
       xuids: command.xuids,
     });
 
     await this.repository.save(session);
+
+    return session;
   }
 }

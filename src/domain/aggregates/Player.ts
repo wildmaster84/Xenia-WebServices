@@ -29,7 +29,7 @@ export default class Player {
   public static create(props: CreateProps) {
     return new Player({
       ...props,
-      port: 36000,
+      port: 36000, // Port hard-coded?
     });
   }
 

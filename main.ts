@@ -48,7 +48,7 @@ async function bootstrap() {
   // Support Heroku
   const PORT = process.env.PORT || new PresentationSettings().get().port;
 
-  await app.listen(PORT);
+  await app.listen(PORT, '0.0.0.0');
 
   logger.debug(`Application is running on: ${await app.getUrl()}`);
 }

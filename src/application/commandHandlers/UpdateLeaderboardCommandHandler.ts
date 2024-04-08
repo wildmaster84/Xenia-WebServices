@@ -22,7 +22,7 @@ export class UpdateLeaderboardCommandHandler
       command.player,
     );
 
-    if (leaderboard == undefined) {
+    if (!leaderboard) {
       leaderboard = new Leaderboard({
         id: command.leaderboardId,
         titleId: command.titleId,
@@ -34,6 +34,7 @@ export class UpdateLeaderboardCommandHandler
         stats: command.stats,
       });
     }
+
     await this.repository.save(leaderboard);
   }
 }

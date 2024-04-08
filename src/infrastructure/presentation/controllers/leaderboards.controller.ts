@@ -27,16 +27,18 @@ export class LeaderboardsController {
   ): Promise<FindLeaderboardsResponse> {
     this.logger.verbose('\n' + JSON.stringify(request));
 
+    const statisticIds = request.queries.map((leaderboard) => ({
+      id: new LeaderboardId(leaderboard.id),
+      statisticIds: leaderboard.statisticIds.map(
+        (statistic) => new LeaderboardStatId(statistic),
+      ),
+    }));
+
     return await this.queryBus.execute(
       new FindLeaderboardsQuery(
         request.players.map((player) => new Xuid(player)),
         new TitleId(request.titleId),
-        request.queries.map((leaderboard) => ({
-          id: new LeaderboardId(leaderboard.id),
-          statisticIds: leaderboard.statisticIds.map(
-            (statistic) => new LeaderboardStatId(statistic),
-          ),
-        })),
+        statisticIds,
       ),
     );
   }

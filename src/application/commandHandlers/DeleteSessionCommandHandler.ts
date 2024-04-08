@@ -30,27 +30,37 @@ export class DeleteSessionCommandHandler
       command.sessionId,
     );
 
+    if (!session) {
+      return undefined;
+    }
+
     this.deleteSession(session);
+
+    return session;
   }
 
   async deleteSession(session: Session) {
-    if (session) {
-      session.delete();
-      this.repository.save(session);
-
-      const qosPath = join(
-        process.cwd(),
-        'qos',
-        session.titleId.toString(),
-        session.id.value,
-      );
-
-      if (existsSync(qosPath)) {
-        await unlink(qosPath);
-
-        this.logger.debug(`Soft Deleted Session: ${session.id.value}`);
-      }
+    if (!session) {
+      return undefined;
     }
+
+    session.delete();
+    this.repository.save(session);
+
+    const qosPath = join(
+      process.cwd(),
+      'qos',
+      session.titleId.toString(),
+      session.id.value,
+    );
+
+    if (existsSync(qosPath)) {
+      await unlink(qosPath);
+
+      this.logger.debug(`Soft Deleted Session: ${session.id.value}`);
+    }
+
+    return session;
   }
 }
 
@@ -80,6 +90,10 @@ export class DeleteSessionsCommandHandler
       command.macAddress,
     );
 
-    await this.repository.deleteSessions(sessions);
+    if (sessions) {
+      await this.repository.deleteSessions(sessions);
+    }
+
+    return sessions;
   }
 }

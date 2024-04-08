@@ -49,6 +49,11 @@ export default class SessionRepository implements ISessionRepository {
     }
 
     const sessions = await this.SessionModel.find(query);
+
+    if (!sessions) {
+      return undefined;
+    }
+
     return sessions.map(this.sessionDomainMapper.mapToDomainModel);
   }
 
@@ -88,7 +93,9 @@ export default class SessionRepository implements ISessionRepository {
       titleId: titleId.toString(),
     });
 
-    if (!session) return undefined;
+    if (!session) {
+      return undefined;
+    }
 
     return this.sessionDomainMapper.mapToDomainModel(session);
   }
@@ -98,7 +105,9 @@ export default class SessionRepository implements ISessionRepository {
       players: xuid.value,
     });
 
-    if (!session) return undefined;
+    if (!session) {
+      return undefined;
+    }
 
     return this.sessionDomainMapper.mapToDomainModel(session);
   }

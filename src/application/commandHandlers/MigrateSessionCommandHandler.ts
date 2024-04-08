@@ -26,7 +26,7 @@ export class MigrateSessionCommandHandler
       command.sessionId,
     );
 
-    if (session.migration !== undefined) {
+    if (session.migration) {
       return await this.repository.findSession(
         command.titleId,
         session.migration,

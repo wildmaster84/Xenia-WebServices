@@ -16,11 +16,6 @@ import { FindPlayerRequest } from '../requests/FindPlayerRequest';
 import { FindPlayerQuery } from 'src/application/queries/FindPlayerQuery';
 import type { PlayerResponse } from 'src/infrastructure/presentation/responses/PlayerResponse';
 
-// TODO
-/* This entire controller is all placeholder.
-  I haven't studied the xnet / player calls much and I am 
-  just filling the gaps with something limited, inefficient and insecure. */
-
 @ApiTags('Player')
 @Controller('/players')
 @Controller()
@@ -35,6 +30,8 @@ export class PlayerController {
 
   @Post()
   async createPlayer(@Body() request: CreatePlayerRequest) {
+    // what if xuid or mac address fails?
+
     await this.commandBus.execute(
       new CreatePlayerCommand(
         new Xuid(request.xuid),
@@ -55,7 +52,9 @@ export class PlayerController {
       new FindPlayerQuery(new IpAddress(request.hostAddress)),
     );
 
-    if (!player) throw new NotFoundException('player not found');
+    if (!player) {
+      throw new NotFoundException('Player not found.');
+    }
 
     return {
       xuid: player.xuid.value,
