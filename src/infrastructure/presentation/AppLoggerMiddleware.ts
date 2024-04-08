@@ -8,7 +8,6 @@ export class AppLoggerMiddleware implements NestMiddleware {
 
   use(request: Request, response: Response, next: NextFunction): void {
     const { ip, secure, method, originalUrl, headers } = request;
-    const { statusCode } = response;
 
     this.logger.setContext(secure ? 'HTTPS' : 'HTTP');
 
@@ -17,6 +16,7 @@ export class AppLoggerMiddleware implements NestMiddleware {
     const userAgent = request.get('user-agent') || '';
 
     response.on('close', () => {
+      const { statusCode } = response;
       const headers_JSON = JSON.stringify(headers);
 
       this.logger.log(
