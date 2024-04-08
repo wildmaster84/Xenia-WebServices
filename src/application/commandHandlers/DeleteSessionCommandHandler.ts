@@ -56,9 +56,9 @@ export class DeleteSessionCommandHandler
 
     if (existsSync(qosPath)) {
       await unlink(qosPath);
-
-      this.logger.debug(`Soft Deleted Session: ${session.id.value}`);
     }
+
+    this.logger.debug(`Soft Deleted Session: ${session.id.value}`);
 
     return session;
   }
