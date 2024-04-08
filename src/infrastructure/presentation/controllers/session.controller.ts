@@ -53,6 +53,7 @@ import { MigrateSessionCommand } from 'src/application/commands/MigrateSessionCo
 import { MigrateSessionRequest } from '../requests/MigrateSessionRequest';
 import { RealIP } from 'nestjs-real-ip';
 import { ProcessClientAddressCommand } from 'src/application/commands/ProcessClientAddressCommand';
+import { Session } from 'src/infrastructure/persistance/models/SessionSchema';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -210,12 +211,14 @@ export class SessionController {
       return;
     }
 
-    const result = await this.commandBus.execute(
+    const result: Session = await this.commandBus.execute(
       new DeleteSessionCommand(new TitleId(titleId), new SessionId(sessionId)),
     );
 
-    if (result) {
-      throw new NotFoundException(`Failed to delete session ${sessionId}.`);
+    if (!result.deleted) {
+      throw new NotFoundException(
+        `Failed to soft delete session ${sessionId}.`,
+      );
     }
   }
 
