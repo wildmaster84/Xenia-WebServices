@@ -17,6 +17,8 @@ export class Player {
   port: number;
   @Prop()
   sessionId?: string;
+  @Prop({ type: Date, expires: '1d', default: Date.now(), required: true })
+  updatedAt: Date;
 }
 
 export const PlayerSchema = SchemaFactory.createForClass(Player);

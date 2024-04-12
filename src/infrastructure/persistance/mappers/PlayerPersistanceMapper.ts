@@ -12,6 +12,7 @@ export default class PlayerPersistanceMapper {
       macAddress: player.macAddress.value,
       port: player.port,
       sessionId: player.sessionId?.value,
+      updatedAt: new Date(),
     };
   }
 }
