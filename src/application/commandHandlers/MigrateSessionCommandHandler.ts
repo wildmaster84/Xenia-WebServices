@@ -33,6 +33,9 @@ export class MigrateSessionCommandHandler
       );
     }
 
+    session.delete();
+    await this.repository.save(session);
+
     const newSession = Session.createMigration({
       session,
       hostAddress: command.hostAddress,
