@@ -57,7 +57,7 @@ hash = "3FE73A3A9C3BD684" # v13.2
     name = "Ignore session arbitration"
     desc = "Crude temporary solution"
     author = "codie"
-    is_enabled = true
+    is_enabled = false
 
     [[patch.be16]]
         address = 0x82400C40
