@@ -47,6 +47,10 @@ tr:nth-child(even) {
     text-align: left;
 }
 
+#header {
+    font-size: 18px;
+}
+
 #sessions {
     margin-top: 18px;
     margin-bottom: 18px;
