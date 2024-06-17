@@ -8,6 +8,8 @@ export class Player {
   @Prop({ required: true, unique: true })
   xuid: string;
   @Prop({ required: true })
+  gamertag: string;
+  @Prop({ required: true })
   machineId: string;
   @Prop({ required: true })
   hostAddress: string;
