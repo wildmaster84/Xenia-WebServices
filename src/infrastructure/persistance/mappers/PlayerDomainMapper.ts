@@ -14,7 +14,7 @@ export default class PlayerDomainMapper {
   public mapToDomainModel(player: PlayerModel): Player {
     return new Player({
       xuid: new Xuid(player.xuid),
-      gamertag: new Gamertag(player.gamertag),
+      gamertag: player.gamertag ? new Gamertag(player.gamertag) : undefined,
       hostAddress: new IpAddress(player.hostAddress),
       macAddress: new MacAddress(player.macAddress),
       machineId: new Xuid(player.machineId),

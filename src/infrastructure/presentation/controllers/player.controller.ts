@@ -36,10 +36,10 @@ export class PlayerController {
     await this.commandBus.execute(
       new CreatePlayerCommand(
         new Xuid(request.xuid),
-        new Gamertag(request.gamertag),
         new Xuid(request.machineId),
         new IpAddress(request.hostAddress),
         new MacAddress(request.macAddress),
+        request.gamertag ? new Gamertag(request.gamertag) : undefined,
       ),
     );
   }
@@ -60,7 +60,7 @@ export class PlayerController {
 
     return {
       xuid: player.xuid.value,
-      gamertag: player.gamertag.value,
+      gamertag: player.gamertag ? player.gamertag.value : '',
       hostAddress: player.hostAddress.value,
       machineId: player.machineId.value,
       port: player.port,

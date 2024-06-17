@@ -6,7 +6,7 @@ import Gamertag from '../value-objects/Gamertag';
 
 interface PlayerProps {
   xuid: Xuid;
-  gamertag: Gamertag;
+  gamertag?: Gamertag;
   hostAddress: IpAddress;
   macAddress: MacAddress;
   machineId: Xuid;
@@ -16,7 +16,7 @@ interface PlayerProps {
 
 interface CreateProps {
   xuid: Xuid;
-  gamertag: Gamertag;
+  gamertag?: Gamertag;
   hostAddress: IpAddress;
   macAddress: MacAddress;
   machineId: Xuid;
