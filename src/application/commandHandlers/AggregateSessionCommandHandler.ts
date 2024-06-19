@@ -32,11 +32,12 @@ export class AggregateSessionCommandHandler
     return '';
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async downloadContent(url: string, type: string): Promise<any> {
     let data = undefined;
 
     try {
-      const response = await fetch(url, { timeout: 500 });
+        const response = await fetch(url, { timeout: 500 });
 
       if (response.ok) {
         if (type === 'arraybuffer') {

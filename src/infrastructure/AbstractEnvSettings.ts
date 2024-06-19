@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export default abstract class AbstractEnvSettings<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected getFullConfig(): any {
     return {
       presentation: {
