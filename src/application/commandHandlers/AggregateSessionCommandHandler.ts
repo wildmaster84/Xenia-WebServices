@@ -32,7 +32,6 @@ export class AggregateSessionCommandHandler
     return '';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async downloadContent(url: string, type: string): Promise<any> {
     let data = undefined;
 
