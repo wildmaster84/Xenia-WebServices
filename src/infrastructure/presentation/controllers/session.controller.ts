@@ -133,7 +133,7 @@ export class SessionController {
 
   @Get('/:sessionId')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async getSession(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -151,7 +151,7 @@ export class SessionController {
 
   @Post('/:sessionId/migrate')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async migrateSession(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -180,7 +180,7 @@ export class SessionController {
 
   @Delete('/:sessionId')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async deleteSession(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -220,7 +220,7 @@ export class SessionController {
 
   @Get('/:sessionId/details')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async getSessionDetails(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -253,7 +253,7 @@ export class SessionController {
 
   @Get('/:sessionId/arbitration')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async getSessionArbitration(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -305,7 +305,7 @@ export class SessionController {
 
   @Post('/:sessionId/modify')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async modifySession(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -330,7 +330,7 @@ export class SessionController {
 
   @Post('/:sessionId/join')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async joinSession(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -384,7 +384,7 @@ export class SessionController {
 
   @Post('/:sessionId/leave')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async leaveSession(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -425,7 +425,7 @@ export class SessionController {
 
   @Post('/:sessionId/qos')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async qosUpload(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -446,7 +446,7 @@ export class SessionController {
 
   @Get('/:sessionId/qos')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async qosDownload(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -473,7 +473,7 @@ export class SessionController {
 
   @Post('/:sessionId/context')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async sessionContextSet(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -494,7 +494,7 @@ export class SessionController {
 
   @Get('/:sessionId/context')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async sessionContextGet(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
@@ -514,7 +514,7 @@ export class SessionController {
 
   @Post('/:sessionId/leaderboards')
   @ApiParam({ name: 'titleId', example: '4D5307E6' })
-  @ApiParam({ name: 'sessionId', example: 'B36B3FE8467CFAC7' })
+  @ApiParam({ name: 'sessionId', example: 'AE00000000000000' })
   async postLeaderboards(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
