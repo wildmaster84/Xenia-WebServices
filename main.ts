@@ -13,13 +13,22 @@ import fs from 'fs';
 async function bootstrap() {
   const logger = new ConsoleLogger('Main');
 
+  const envs = new PersistanceSettings().get();
+
+  if (envs.mongoURI == '') {
+    logger.debug(`MONGO_URI is undefined!`);
+  }
+
   const app = await NestFactory.create<NestExpressApplication>(XeniaModule, {
     rawBody: true,
   });
 
-  const envs = new PersistanceSettings().get();
+  const SSL_enabled = envs.SSL == 'true';
+  const Swagger_enabled = envs.swagger_API == 'true';
+  const Heroku_Nginx_enabled = envs.heroku_nginx == 'true';
+  const Nginx_enabled = envs.nginx == 'true';
 
-  if (envs.swagger_API == 'true') {
+  if (Swagger_enabled) {
     const config = new DocumentBuilder()
       .setTitle('Xenia Web API')
       .setDescription('')
@@ -39,8 +48,7 @@ async function bootstrap() {
             "'unsafe-inline'",
             "'sha256-Zww3/pDgfYVU8OPCr/mr7NFf4ZA0lY1Xeb22wR47e0w='",
           ],
-          upgradeInsecureRequests:
-            envs.SSL == 'true' || envs.SSL == undefined ? [] : null,
+          upgradeInsecureRequests: SSL_enabled ? [] : null,
         },
       },
     }),
@@ -50,22 +58,31 @@ async function bootstrap() {
   // Support Heroku
   const PORT = process.env.PORT || new PresentationSettings().get().port;
 
-  if (envs.heroku_nginx == 'true' || envs.nginx == 'true') {
+  if (Heroku_Nginx_enabled || Nginx_enabled) {
     // Trust the first proxy (express)
     app.set('trust proxy', true);
   }
 
   // Heroku + Nginx
-  if (envs.heroku_nginx == 'true') {
+  if (Heroku_Nginx_enabled) {
     // Listen to ngnix socket
     await app.listen('/tmp/nginx.socket');
 
     // Let Ngnix know we want to start serving from the proxy
     fs.openSync('/tmp/app-initialized', 'w');
   } else {
+    // Listen on all network interfaces
     await app.listen(PORT, '0.0.0.0');
   }
 
+  logger.debug(``);
+  logger.debug(`Swagger API:\t ${Swagger_enabled ? 'Enabled' : 'Disabled'}`);
+  logger.debug(`SSL:\t\t ${SSL_enabled ? 'Enabled' : 'Disabled'}`);
+  logger.debug(`Nginx:\t\t ${Nginx_enabled ? 'Enabled' : 'Disabled'}`);
+  logger.debug(
+    `Heroku & Nginx:\t ${Heroku_Nginx_enabled ? 'Enabled' : 'Disabled'}`,
+  );
+  logger.debug(``);
   logger.debug(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

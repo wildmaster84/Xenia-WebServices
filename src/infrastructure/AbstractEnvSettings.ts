@@ -8,11 +8,15 @@ export default abstract class AbstractEnvSettings<T> {
         port: parseInt(process.env.API_PORT),
       },
       persistance: {
-        mongoURI: process.env.MONGO_URI,
-        swagger_API: process.env.SWAGGER_API,
-        SSL: process.env.SSL,
-        nginx: process.env.nginx,
-        heroku_nginx: process.env.heroku_nginx,
+        mongoURI: process.env.MONGO_URI ? process.env.MONGO_URI : '',
+        swagger_API: process.env.SWAGGER_API
+          ? process.env.SWAGGER_API
+          : 'false',
+        SSL: process.env.SSL ? process.env.SSL : 'false',
+        nginx: process.env.nginx ? process.env.nginx : 'false',
+        heroku_nginx: process.env.heroku_nginx
+          ? process.env.heroku_nginx
+          : 'false',
       },
     };
   }

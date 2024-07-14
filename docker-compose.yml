@@ -5,6 +5,7 @@ services:
         API_PORT: 36000
         MONGO_URI: mongodb://database:27017/
         SWAGGER_API: true
+        nginx: true
     ports:
       - '36000:36000'
     # volumes:
