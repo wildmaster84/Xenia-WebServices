@@ -35,6 +35,7 @@ export class MigrateSessionCommandHandler
 
     const newSession = Session.createMigration({
       session,
+      xuid: command.xuid,
       hostAddress: command.hostAddress,
       macAddress: command.macAddress,
       port: command.port,

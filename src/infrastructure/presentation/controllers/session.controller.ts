@@ -81,6 +81,7 @@ export class SessionController {
       await this.commandBus.execute(
         new CreateSessionCommand(
           new TitleId(titleId),
+          request.xuid ? new Xuid(request.xuid) : undefined,
           request.title,
           request.mediaId,
           request.version,
@@ -169,6 +170,7 @@ export class SessionController {
       new MigrateSessionCommand(
         new TitleId(titleId),
         new SessionId(sessionId),
+        request.xuid ? new Xuid(request.xuid) : undefined,
         new IpAddress(request.hostAddress),
         new MacAddress(request.macAddress),
         request.port,
@@ -345,7 +347,7 @@ export class SessionController {
         : false;
 
       if (!request.privateSlots) {
-        this.logger.warn('Defaulting to public slot');
+        this.logger.debug('Defaulting to public slot');
       }
 
       members.set(new Xuid(xuid), is_private);

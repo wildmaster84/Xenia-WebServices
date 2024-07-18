@@ -9,6 +9,7 @@ import Xuid from '../value-objects/Xuid';
 interface SessionProps {
   id: SessionId;
   titleId: TitleId;
+  xuid: Xuid;
   title: string;
   mediaId: string;
   version: string;
@@ -27,6 +28,7 @@ interface SessionProps {
 interface CreateProps {
   id: SessionId;
   titleId: TitleId;
+  xuid: Xuid;
   title: string;
   mediaId: string;
   version: string;
@@ -46,6 +48,7 @@ interface ModifyProps {
 
 interface CreateMigrationProps {
   session: Session;
+  xuid: Xuid;
   hostAddress: IpAddress;
   macAddress: MacAddress;
   port: number;
@@ -115,9 +118,17 @@ export default class Session {
   }
 
   public static createMigration(props: CreateMigrationProps) {
+    if (props.session.players.size > 0) {
+      // Remove old host from migrated session
+      if (props.session.xuid) {
+        props.session.players.delete(props.session.xuid.value);
+      }
+    }
+
     const newSession = new Session({
       ...props.session.props,
       id: new SessionId(this.GenerateSessionId()),
+      xuid: props.xuid,
       hostAddress: props.hostAddress,
       macAddress: props.macAddress,
       port: props.port,
@@ -238,6 +249,10 @@ export default class Session {
 
   get titleId() {
     return this.props.titleId;
+  }
+
+  get xuid() {
+    return this.props.xuid;
   }
 
   get title() {
