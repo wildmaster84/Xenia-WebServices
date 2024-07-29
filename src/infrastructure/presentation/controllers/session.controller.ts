@@ -419,6 +419,7 @@ export class SessionController {
         new TitleId(titleId),
         request.searchIndex,
         request.resultsCount,
+        request.numUsers,
       ),
     );
 

@@ -23,6 +23,7 @@ export class SessionSearchQueryHandler
     return this.repository.findAdvertisedSessions(
       query.title,
       query.resultsCount,
+      query.numUsers,
     );
   }
 }

@@ -5,5 +5,6 @@ export class SessionSearchQuery {
     public readonly title: TitleId,
     public readonly searchIndex: number,
     public readonly resultsCount: number,
+    public readonly numUsers: number,
   ) {}
 }

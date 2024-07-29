@@ -9,6 +9,7 @@ export default interface ISessionRepository {
   findAdvertisedSessions: (
     titleId: TitleId,
     resultsCount: number,
+    numUsers: number,
   ) => Promise<Session[]>;
   findAllAdvertisedSessions: () => Promise<Session[]>;
   findSession: (

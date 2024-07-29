@@ -311,6 +311,10 @@ export default class Session {
     return this.publicSlotsCount + this.privateSlotsCount;
   }
 
+  get isfull() {
+    return this.availablePublicSlots == 0 && this.availablePrivateSlots == 0;
+  }
+
   get macAddress() {
     return this.props.macAddress;
   }

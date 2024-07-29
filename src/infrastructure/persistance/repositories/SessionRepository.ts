@@ -112,8 +112,12 @@ export default class SessionRepository implements ISessionRepository {
     return this.sessionDomainMapper.mapToDomainModel(session);
   }
 
-  public async findAdvertisedSessions(titleId: TitleId, resultsCount: number) {
-    const sessions = await this.SessionModel.find(
+  public async findAdvertisedSessions(
+    titleId: TitleId,
+    resultsCount: number,
+    numUsers: number,
+  ) {
+    const sessionsDocs = await this.SessionModel.find(
       {
         advertised: true,
         deleted: false,
@@ -126,7 +130,33 @@ export default class SessionRepository implements ISessionRepository {
       },
     );
 
-    return sessions.map(this.sessionDomainMapper.mapToDomainModel);
+    let sessions: Session[] = sessionsDocs.map(
+      this.sessionDomainMapper.mapToDomainModel,
+    );
+
+    // Remove private sessions
+    sessions = sessions.filter((session) => {
+      return session.publicSlotsCount != 0;
+    });
+
+    // Remove sessions that are full
+    sessions = sessions.filter((session) => {
+      return !session.isfull;
+    });
+
+    // Remove sessions with not enough slots
+    if (numUsers) {
+      sessions = sessions.filter((session) => {
+        if (
+          session.availablePublicSlots >= numUsers ||
+          session.availablePrivateSlots >= numUsers
+        ) {
+          return true;
+        }
+      });
+    }
+
+    return sessions;
   }
 
   public async findAllAdvertisedSessions() {
