@@ -1,0 +1,13 @@
+title_name = "PGR3"
+title_id = "4D5307D1"
+hash = "1DBBA44F305E61A9"
+#media_id = "75528D49" Disc (Europe): http://redump.org/disc/72167
+
+[[patch]]
+    name = "NOP Banner Download"
+    author = "Adrian"
+    is_enabled = true
+
+    [[patch.be32]]
+        address = 0x821ADF24
+        value = 0x60000000
