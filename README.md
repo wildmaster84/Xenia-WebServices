@@ -11,70 +11,26 @@ If you'd like to help improve this project, you may report issues or contribute 
 
 This project uses [NestJS](https://nestjs.com/) a Node.js framework using Typescript which follows the [CQRS](https://docs.nestjs.com/recipes/cqrs) model. In addition, [MongoDB](https://www.mongodb.com/) a document-oriented database (NoSQL database).
 
-## Preparing the project
+## Project Setup
 
-1. Install dependencies with the `npm install` command.
-2. Create a `.env` file in the project root, following this structure.
-3. [What is an .env file?](https://devcenter.heroku.com/articles/heroku-local#set-up-your-local-environment-variables)
+1. Install [NodeJS](https://nodejs.org/).
 
-```env
-  API_PORT=36000
-  MONGO_URI=mongodb://127.0.0.1:27017/
-  SWAGGER_API=true
-  SSL=true
-```
+2. Install MongoDB Compass, details below.
 
-## MongoDB Compass
-This **Xenia Web API** is dependant on a MongoDB database.
+2. Copy the provided [.env.template](/.env.template) and rename it to `.env`.
 
-1. Install [MongoDB Community Server](https://www.mongodb.com/try/download/community) to manage your database ([tutorial](https://www.youtube.com/watch?v=gDOKSgqM-bQ)).
-2. If you plan to create a local database using MongoDB Compass it must be installed as a **network service** or use [MongoDB Atlas](https://www.mongodb.com/atlas/database) a cloud database for free.
-3. The following database structure will be created upon starting the server.
+3. Configure the `.env` file if needed.
 
-**Database Structure**
-```
-└─── test
-    │  leaderboards
-    |  players
-    |  sessions
-```
+4. Run [setup.bat](/setup.bat) script to automatically install and build the project.
 
-4. Copy the database connection string and set it in the .env file.
+5. Check the server is running by accessing the frontend at http://127.0.0.1:36000/.
 
-```
-MONGO_URI=mongodb://127.0.0.1:27017/
-```
+### MongoDB Compass
+Install [MongoDB Community Server](https://www.mongodb.com/try/download/community) to manage your database ([tutorial](https://www.youtube.com/watch?v=gDOKSgqM-bQ)).
 
-5. Toggle [Upgrade-Insecure-Requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade-Insecure-Requests) header. (default **true**)
+If you plan to create a local database using MongoDB Compass it must be installed as a **network service** or use [MongoDB Atlas](https://www.mongodb.com/atlas/database) a cloud database for free.
 
-```
-SSL=true
-```
-
-6. During production you may want to disable Swagger's API.
-
-```
-SWAGGER_API=false
-```
-
-## Running the app
-
-Build the web service with the `npm run build` command.
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-You can check everything is setup and working by accessing the frontend at http://127.0.0.1:36000/.
-
-## Hosting
+## Hosting Services
 
 **Heroku**\
 You can easily setup and host this REST API on [Heroku](https://www.heroku.com/), however they do not offer a free tier.
@@ -83,6 +39,9 @@ You can easily setup and host this REST API on [Heroku](https://www.heroku.com/)
 [Vercel](https://vercel.com/) is another option and it offers a free tier. However, i don't know how easy it will be to setup and configure.
 
 ## Adding Title Support
+
+<details>
+  <summary>Expand for details</summary>
 
 If you would like to add a title to this API, check out the `titles` folder for examples!
 
@@ -97,3 +56,4 @@ To find the ports the title opens you can use [cports](https://www.nirsoft.net/u
 Titles must provide leaderboard configuration to push statistics to the API. This is more complicated and takes trial and error. I'd recommend self-hosting the API to debug this.
 
 Finally, you can also throw any title-specific netplay related patches in the `patches` folder!
+</details>
