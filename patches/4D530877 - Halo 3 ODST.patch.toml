@@ -1,0 +1,25 @@
+title_name = "Halo 3: ODST"
+title_id = "4D530877" # MS-2167
+hash = "7CCC3CAA0D45D19F" # v11.0
+#media_id = "152AB680" # Disc (Europe, Australia): http://redump.org/disc/12802
+
+[[patch]]
+    name = "Allow public IP addresses."
+    desc = "Allows the game to connect to players who are not on the current network."
+    author = "codie, Adrian"
+    is_enabled = true
+
+    [[patch.be32]]
+        address = 0x821D4F78 # transport_address_get_insecure_xbox_address
+        value = 0x60000000
+
+# Temp fix for service tags
+
+[[patch]]
+    name = "Disable StringVerify"
+    author = "codie, Adrian"
+    is_enabled = true
+
+    [[patch.be32]]
+        address = 0x82707A1C
+        value = 0x60000000
