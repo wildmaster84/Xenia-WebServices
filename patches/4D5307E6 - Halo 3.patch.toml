@@ -15,9 +15,9 @@ hash = "19EB90F06A070ED6"
 
 
 # Temp fix for service tags
+
 [[patch]]
-    name = "Disable string validation"
-    desc = "Crude temporary solution"
+    name = "Disable XStringVerify"
     author = "codie"
     is_enabled = true
 
