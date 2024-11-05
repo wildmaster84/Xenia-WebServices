@@ -1,0 +1,25 @@
+title_name = "Halo 4"
+title_id = "4D530919" # MS-2329
+hash = "465947D76056C3DA" # v15.0.10
+#media_id = "1C9D20BC" # Disc (World): http://redump.org/disc/37084
+
+[[patch]]
+    name = "Allow public IP addresses."
+    desc = "Allows the game to connect to players who are not on the current network."
+    author = "codie, Adrian"
+    is_enabled = true
+
+    [[patch.be32]]
+        address = 0x82806E20 # transport_address_get_insecure_xbox_address
+        value = 0x60000000
+
+# Temp fix for service tags
+
+[[patch]]
+    name = "Disable StringVerify"
+    author = "codie, Adrian"
+    is_enabled = true
+
+    [[patch.be32]]
+        address = 0x82E361EC
+        value = 0x60000000
