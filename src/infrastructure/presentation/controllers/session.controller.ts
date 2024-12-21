@@ -105,7 +105,11 @@ export class SessionController {
 
       // If player doesn't exists add them to players table
       if (player) {
-        player.setSession(new SessionId(request.sessionId));
+        if (!flags.isStatsSession) {
+          player.setSession(new SessionId(request.sessionId));
+        } else {
+          this.logger.verbose(`Skip updating presence`);
+        }
 
         await this.commandBus.execute(
           new UpdatePlayerCommand(player.xuid, player),
@@ -355,7 +359,7 @@ export class SessionController {
       members.set(new Xuid(xuid), is_private);
     });
 
-    const session = await this.commandBus.execute(
+    const session: Session = await this.commandBus.execute(
       new JoinSessionCommand(
         new TitleId(titleId),
         new SessionId(sessionId),
@@ -378,13 +382,17 @@ export class SessionController {
         new GetPlayerQuery(player_xuid),
       );
 
-      if (player) {
+      const flags = new SessionFlags(session.flags.value);
+
+      if (player && !flags.isStatsSession) {
         player.setSession(new SessionId(sessionId));
         player.setTitleId(new TitleId(titleId));
 
         await this.commandBus.execute(
           new UpdatePlayerCommand(player.xuid, player),
         );
+      } else {
+        this.logger.verbose(`Skip updating presence`);
       }
     }
   }
