@@ -105,15 +105,15 @@ export class SessionController {
 
       // If player doesn't exists add them to players table
       if (player) {
-        if (!flags.isStatsSession) {
+        if (flags.isAdvertised) {
           player.setSession(new SessionId(request.sessionId));
+
+          await this.commandBus.execute(
+            new UpdatePlayerCommand(player.xuid, player),
+          );
         } else {
           this.logger.verbose(`Skip updating presence`);
         }
-
-        await this.commandBus.execute(
-          new UpdatePlayerCommand(player.xuid, player),
-        );
       } else {
         this.logger.debug(`Player not found: ${request.hostAddress}`);
 
@@ -169,7 +169,7 @@ export class SessionController {
       throw new NotFoundException(`Session ${sessionId} was not found.`);
     }
 
-    const newSession = await this.commandBus.execute(
+    const newSession: Session = await this.commandBus.execute(
       new MigrateSessionCommand(
         new TitleId(titleId),
         new SessionId(sessionId),
@@ -179,6 +179,24 @@ export class SessionController {
         request.port,
       ),
     );
+
+    if (request.xuid) {
+      const player: Player = await this.queryBus.execute(
+        new GetPlayerQuery(new Xuid(request.xuid)),
+      );
+
+      const flags = new SessionFlags(session.flags.value);
+
+      if (player && flags.isAdvertised) {
+        player.setSession(newSession.id);
+
+        await this.commandBus.execute(
+          new UpdatePlayerCommand(player.xuid, player),
+        );
+      } else {
+        this.logger.verbose(`Skip updating presence`);
+      }
+    }
 
     return this.sessionMapper.mapToPresentationModel(newSession);
   }
@@ -384,7 +402,7 @@ export class SessionController {
 
       const flags = new SessionFlags(session.flags.value);
 
-      if (player && !flags.isStatsSession) {
+      if (player && flags.isAdvertised) {
         player.setSession(new SessionId(sessionId));
         player.setTitleId(new TitleId(titleId));
 
@@ -405,7 +423,7 @@ export class SessionController {
     @Param('sessionId') sessionId: string,
     @Body() request: LeaveSessionRequest,
   ) {
-    const session = await this.commandBus.execute(
+    const session: Session = await this.commandBus.execute(
       new LeaveSessionCommand(
         new TitleId(titleId),
         new SessionId(sessionId),
@@ -420,27 +438,29 @@ export class SessionController {
       throw new NotFoundException(error_msg);
     }
 
-    // Update leaving players
-    // Reset player's session id and title id when they leave a session.
     // Problem is supporting multiple session instances
-    /*
-      const players_xuid = request.xuids.map((xuid) => new Xuid(xuid));
 
-      for (const player_xuid of players_xuid) {
-        const player: Player = await this.queryBus.execute(
-          new GetPlayerQuery(player_xuid),
+    // Update leaving players
+    // Reset player's session id when they leave a session.
+    const players_xuid = request.xuids.map((xuid) => new Xuid(xuid));
+
+    for (const player_xuid of players_xuid) {
+      const player: Player = await this.queryBus.execute(
+        new GetPlayerQuery(player_xuid),
+      );
+
+      const flags = new SessionFlags(session.flags.value);
+
+      if (player && flags.isAdvertised) {
+        player.setSession(new SessionId('0'.repeat(16)));
+
+        await this.commandBus.execute(
+          new UpdatePlayerCommand(player.xuid, player),
         );
-
-        if (player) {
-          player.setSession(new SessionId('0'.repeat(16)));
-          // player.setTitleId(new TitleId('0'));
-
-          await this.commandBus.execute(
-            new UpdatePlayerCommand(player.xuid, player),
-          );
-        }
+      } else {
+        this.logger.verbose(`Skip updating presence`);
       }
-    */
+    }
   }
 
   @Post('/search')
