@@ -13,13 +13,11 @@ hash = "28B1F695AC7E881F" # v15.0
         address = 0x827E6538 # transport_address_get_insecure_xbox_address
         value = 0x60000000
 
-# Temp fix for service tags
-
 [[patch]]
-    name = "Disable StringVerify"
-    author = "codie, Adrian"
+    name = "Disable XStringVerify" # c_verify_strings_task
+    author = "codie, Adrian, wild"
     is_enabled = true
 
     [[patch.be32]]
-        address = 0x82E1189C
+        address = 0x82702D80 # XStringVerify
         value = 0x60000000
