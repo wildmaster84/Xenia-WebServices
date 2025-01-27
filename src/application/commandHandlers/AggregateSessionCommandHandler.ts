@@ -124,7 +124,7 @@ export class AggregateSessionCommandHandler
     try {
       title = xml_document['a:feed']['a:entry']['a:title'];
     } catch {
-      this.logger.error(`Title property not available for ${titleId}.`);
+      /* empty */
     }
 
     return title;
@@ -141,7 +141,7 @@ export class AggregateSessionCommandHandler
       const image = images.find((img: any) => img.size == 14);
       title_url = image.fileUrl;
     } catch {
-      this.logger.error(`Tile URL property not available for ${titleId}.`);
+      /* empty */
     }
 
     return title_url;
@@ -173,7 +173,7 @@ export class AggregateSessionCommandHandler
           }
         }
       } catch {
-        this.logger.error(`Tile icon not available for ${titleId}.`);
+        /* empty */
       }
     }
 
