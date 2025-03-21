@@ -1,0 +1,9 @@
+{
+    "connect": [
+        {
+            "info": "Syndicate 2012 Server",
+            "port": 42124,
+            "mappedTo": 42130
+        }
+    ]
+}
