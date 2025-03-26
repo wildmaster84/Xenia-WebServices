@@ -250,7 +250,11 @@ export class AggregateSessionCommandHandler
 
     this.logger.verbose('Recent Games:');
     for (const [titleId, _xml_document] of title_xml_cache) {
-      this.logger.verbose(await this.getTitleName(titleId));
+      const title_name = await this.getTitleName(titleId);
+
+      if (title_name) {
+        this.logger.verbose(title_name);
+      }
     }
 
     return JSON.stringify(titles);
