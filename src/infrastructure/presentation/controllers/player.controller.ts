@@ -128,8 +128,6 @@ export class PlayerController {
   ): Promise<FindUsersInfo> {
     const UsersInfo: FindUsersInfo = [];
 
-    this.logger.debug(request);
-
     for (const UserInfo of request.UsersInfo) {
       const info: FindUserInfo = {
         xuid: UserInfo[0],
@@ -162,8 +160,6 @@ export class PlayerController {
 
       UsersInfo.push(info);
     }
-
-    this.logger.debug(UsersInfo);
 
     return UsersInfo;
   }

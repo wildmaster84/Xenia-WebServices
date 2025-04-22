@@ -76,8 +76,6 @@ export default class PlayerRepository implements IPlayerRepository {
   }
 
   public async findByGamertag(gamertag: Gamertag): Promise<Player> {
-    this.logger.debug(gamertag);
-
     const player = await this.PlayerModel.findOne({
       gamertag: gamertag.value,
     });
