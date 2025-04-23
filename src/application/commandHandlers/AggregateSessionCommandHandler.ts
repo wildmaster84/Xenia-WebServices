@@ -74,15 +74,18 @@ export class AggregateSessionCommandHandler
       return title_xml_cache.get(titleId);
     }
 
-    const backends: Array<string> = [];
+    // URL, Timeout
+    const backends: Array<[string, number]> = [];
 
-    backends.push(`https://xboxpreservation.org/api/xml/${titleId}`);
-    backends.push(
-      `https://marketplace-xb.xboxlive.com/marketplacecatalog/v1/product/en-US/66ACD000-77FE-1000-9115-D802${titleId}?bodytypes=1.3&detailview=detaillevel5&pagenum=1&pagesize=1&stores=1&tiers=2.3&offerfilter=1&producttypes=1.5.18.19.20.21.22.23.30.34.37.46.47.61`,
-    );
-    backends.push(
+    backends.push([`https://archive.rushhosting.net/api/xml/${titleId}`, 1000]);
+    backends.push([
       `https://raw.githubusercontent.com/wildmaster84/restored-media/refs/heads/main/${titleId}/${titleId.toLowerCase()}.xml`,
-    );
+      500,
+    ]);
+    backends.push([
+      `https://marketplace-xb.xboxlive.com/marketplacecatalog/v1/product/en-US/66ACD000-77FE-1000-9115-D802${titleId}?bodytypes=1.3&detailview=detaillevel5&pagenum=1&pagesize=1&stores=1&tiers=2.3&offerfilter=1&producttypes=1.5.18.19.20.21.22.23.30.34.37.46.47.61`,
+      1000,
+    ]);
 
     let title_xml: string = '';
     let is_valid = true;
@@ -90,7 +93,10 @@ export class AggregateSessionCommandHandler
     let xml_document = undefined;
 
     for (const backend of backends) {
-      title_xml = await this.downloadContent(backend, 'document');
+      const url: string = backend[0];
+      const timeout: number = backend[1];
+
+      title_xml = await this.downloadContent(url, 'document', timeout);
 
       try {
         xml_document = new XMLParser().parse(title_xml, true);
