@@ -56,6 +56,7 @@ import Session from 'src/domain/aggregates/Session';
 import { UpdatePlayerCommand } from 'src/application/commands/UpdatePlayerCommand';
 import { GetTitleSessionsQuery } from 'src/application/queries/GetTitleSessionsQuery';
 import SessionDetailsPresentationMapper from '../mappers/SessionDetailsPresentationMapper';
+import { DeleteSessionRequest } from '../requests/DeleteSessionRequest';
 
 @ApiTags('Sessions')
 @Controller('/title/:titleId/sessions')
@@ -220,6 +221,7 @@ export class SessionController {
   async deleteSession(
     @Param('titleId') titleId: string,
     @Param('sessionId') sessionId: string,
+    @Body() request: DeleteSessionRequest,
     @RealIP() ip: string,
   ) {
     const session = await this.queryBus.execute(
@@ -235,9 +237,12 @@ export class SessionController {
       return;
     }
 
-    if (session.hostAddress.value !== ipv4) {
+    if (
+      session.hostAddress.value !== ipv4 ||
+      session.xuid.value !== request.xuid
+    ) {
       this.logger.debug(
-        `Client ${ipv4} attempted to delete session created by ${session.hostAddress.value}`,
+        `Client ${ipv4}(${request.xuid}) attempted to delete session created by ${session.hostAddress.value}(${session.xuid.value})`,
       );
       this.logger.debug(`Session ${sessionId} will not be deleted.`);
       return;
