@@ -34,7 +34,8 @@ import { ProcessClientAddressCommand } from 'src/application/commands/ProcessCli
 import { RealIP } from 'nestjs-real-ip';
 import { DeleteMyProfilesQuery } from 'src/application/queries/DeleteMyProfilesQuery';
 import { UpdatePlayerCommand } from 'src/application/commands/UpdatePlayerCommand';
-import StateFlag, { StateFlags } from 'src/domain/value-objects/StateFlag';
+import { PlayerStatusRequest } from '../requests/PlayerStatusRequest';
+import { PlayerStatusResponse } from '../responses/PlayerStatusResponse';
 
 @ApiTags('Player')
 @Controller('/players')
@@ -99,10 +100,6 @@ export class PlayerController {
       if (!player) {
         continue;
       }
-
-      const state: StateFlag = new StateFlag(
-        StateFlags.ONLINE | StateFlags.JOINABLE | StateFlags.PLAYING,
-      );
 
       // player.setState(new StateFlag(19));
       player.setRichPresence(PresenceUpdate.richPresence);
@@ -199,6 +196,67 @@ export class PlayerController {
     }
 
     return UsersInfo;
+  }
+
+  // Check Players Status
+  @Post('/status')
+  async getPlayersStatus(
+    @Body() request: PlayerStatusRequest,
+  ): Promise<PlayerStatusResponse> {
+    this.logger.debug(request);
+
+    let xuids: Array<Xuid> = request.xuids.map((xuid: string) => {
+      let xuid_: Xuid = undefined;
+
+      try {
+        xuid_ = new Xuid(xuid);
+      } catch {
+        this.logger.error(`Invalid XUID: ${xuid}`);
+      }
+
+      return xuid_;
+    });
+
+    // Remove undefined xuids from array
+    xuids = _.compact(xuids);
+
+    const players: Array<Player> = await this.queryBus.execute(
+      new GetPlayersQuery(xuids),
+    );
+
+    const playerStatuses: PlayerStatusResponse = [];
+
+    // Create a map for quick lookup of found players
+    const playerMap = new Map<string, Player>();
+    players.forEach((player: Player) => {
+      playerMap.set(player.xuid.value, player);
+    });
+
+    // Process each requested xuid
+    request.xuids.forEach((xuidString: string) => {
+      const player = playerMap.get(xuidString);
+
+      if (player) {
+        const status = {
+          xuid: player.xuid.value,
+          gamertag: player.gamertag.value,
+          online: player.state.isOnline(),
+          state: player.state.value,
+        };
+        playerStatuses.push(status);
+      } else {
+        // Player not found, return with empty gamertag and offline status
+        const status = {
+          xuid: xuidString,
+          gamertag: '',
+          online: false,
+          state: 0,
+        };
+        playerStatuses.push(status);
+      }
+    });
+
+    return playerStatuses;
   }
 
   @Get('/deletemyprofiles')
