@@ -35,6 +35,8 @@ import { RealIP } from 'nestjs-real-ip';
 import { DeleteMyProfilesQuery } from 'src/application/queries/DeleteMyProfilesQuery';
 import { UpdatePlayerCommand } from 'src/application/commands/UpdatePlayerCommand';
 import StateFlag, { StateFlags } from 'src/domain/value-objects/StateFlag';
+import { PlayerStatusRequest } from '../requests/PlayerStatusRequest';
+import { PlayerStatusResponse } from '../responses/PlayerStatusResponse';
 
 @ApiTags('Player')
 @Controller('/players')
@@ -218,5 +220,69 @@ export class PlayerController {
     }
 
     return deleted_profiles;
+  }
+
+  // Get Players Status
+  @Post('/status')
+  async Status(
+    @Body() request: PlayerStatusRequest,
+  ): Promise<PlayerStatusResponse> {
+    const playerStatuses: PlayerStatusResponse = [];
+
+    this.logger.debug(request);
+
+    let xuids: Array<Xuid> = request.xuids.map((xuid: string) => {
+      let xuid_: Xuid = undefined;
+
+      try {
+        xuid_ = new Xuid(xuid);
+      } catch {
+        this.logger.error(`Invalid XUID: ${xuid}`);
+      }
+
+      return xuid_;
+    });
+
+    // Remove undefined xuids from array
+    xuids = _.compact(xuids);
+
+    const players: Array<Player> = await this.queryBus.execute(
+      new GetPlayersQuery(xuids),
+    );
+
+    // Create a map for faster lookup
+    const playerMap = new Map<string, Player>();
+    players.forEach((player: Player) => {
+      playerMap.set(player.xuid.value, player);
+    });
+
+    // Process each requested xuid
+    for (const xuid of xuids) {
+      const player = playerMap.get(xuid.value);
+
+      if (player) {
+        const status = {
+          xuid: player.xuid.value,
+          gamertag: player.gamertag.value,
+          online: player.state ? player.state.isOnline() : false,
+          state: player.state ? player.state.value : undefined,
+          sessionId: player.sessionId ? player.sessionId.value : undefined,
+          titleId: player.titleId ? player.titleId.toString() : undefined,
+        };
+
+        playerStatuses.push(status);
+      } else {
+        // Player not found - return minimal info
+        const status = {
+          xuid: xuid.value,
+          gamertag: 'Unknown',
+          online: false,
+        };
+
+        playerStatuses.push(status);
+      }
+    }
+
+    return playerStatuses;
   }
 }
