@@ -88,6 +88,9 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.63.0"
   },
+  "overrides": {
+    "uuid": "$uuid"
+  },
   "jest": {
     "moduleFileExtensions": [
       "js",
