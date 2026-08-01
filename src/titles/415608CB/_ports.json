@@ -1,0 +1,14 @@
+{
+    "connect": [
+      {
+        "info": "Server",
+        "port": 1020,
+        "mappedTo": 1020
+      },
+      {
+        "info": "Server",
+        "port": 1021,
+        "mappedTo": 1020
+      }
+    ]
+}
