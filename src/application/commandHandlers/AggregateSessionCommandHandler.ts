@@ -87,7 +87,6 @@ export class AggregateSessionCommandHandler implements ICommandHandler<Aggregate
     // URL, Timeout
     const backends: Array<[string, number]> = [];
 
-    backends.push([`https://archive.rushhosting.net/api/xml/${titleId}`, 1000]);
     backends.push([
       `https://raw.githubusercontent.com/wildmaster84/restored-media/refs/heads/main/${titleId}/${titleId.toLowerCase()}.xml`,
       500,
