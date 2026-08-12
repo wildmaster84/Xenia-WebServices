@@ -26,7 +26,7 @@ async function bootstrap() {
 
   app.use((req: any, res: any, next: any) => {
     const url: string = req.url || '';
-    if (url.startsWith('/users/') || url.startsWith('/media/')) {
+    if (url.startsWith('/users/') || url.startsWith('/media/') || url.startsWith('/storage/')) {
       req.url = '/services' + req.url;
       req.originalUrl = '/services' + req.originalUrl;
     }
@@ -42,7 +42,7 @@ async function bootstrap() {
 
   app.use((req: any, res: any, next: any) => {
     const url: string = req.url || '';
-    if (url.startsWith('/services/users/') || url.startsWith('/services/media/')) {
+    if (url.startsWith('/services/users/') || url.startsWith('/services/media/') || url.startsWith('/services/storage/')) {
       return next();
     }
     const ct = (req.headers['content-type'] || '').toLowerCase();
