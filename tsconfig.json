@@ -9,9 +9,11 @@
     "target": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
-     "paths": {
-      "*": ["./*"]
+    "rootDir": "./src",
+    "paths": {
+      "src/*": ["./src/*"] 
     },
+    "tsBuildInfoFile": "./dist/tsconfig.build.tsbuildinfo",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -20,5 +22,6 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true
-  }
+  },
+  "include": ["src/**/*"],
 }
