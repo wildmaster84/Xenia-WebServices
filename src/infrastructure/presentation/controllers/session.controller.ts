@@ -12,7 +12,7 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import TitleId from 'src/domain/value-objects/TitleId';
-import { Body, Post, Req, Res } from '@nestjs/common/decorators';
+import { Body, Post, Req, Res } from '@nestjs/common';
 import { CreateSessionRequest } from '../requests/CreateSessionRequest';
 import { CreateSessionCommand } from 'src/application/commands/CreateSessionCommand';
 import SessionId from 'src/domain/value-objects/SessionId';

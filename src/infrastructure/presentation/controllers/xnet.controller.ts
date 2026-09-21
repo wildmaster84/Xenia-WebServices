@@ -1,7 +1,7 @@
 import { ConsoleLogger, Controller, Get } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Delete, Param, Query } from '@nestjs/common/decorators';
+import { Delete, Param, Query } from '@nestjs/common';
 import IpAddress from 'src/domain/value-objects/IpAddress';
 import MacAddress from 'src/domain/value-objects/MacAddress';
 import { DeleteSessionsCommand } from 'src/application/commands/DeleteSessionCommand';

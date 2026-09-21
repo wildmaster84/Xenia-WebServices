@@ -2,7 +2,7 @@ import {
   HttpException,
   NotFoundException,
   PayloadTooLargeException,
-} from '@nestjs/common/exceptions';
+} from '@nestjs/common';
 import path from 'path';
 import { HttpStatus } from '@nestjs/common/enums/http-status.enum';
 import { stat } from 'fs/promises';
