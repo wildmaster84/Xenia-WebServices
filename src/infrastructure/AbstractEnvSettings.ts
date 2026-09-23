@@ -18,6 +18,7 @@ export default abstract class AbstractEnvSettings<T> {
           ? process.env.heroku_nginx
           : 'false',
         xstorage: process.env.xstorage ? process.env.xstorage : 'false',
+        titlestorage: process.env.titlestorage ? process.env.titlestorage : 'false',
         HEROKU_RELEASE_CREATED_AT: process.env.HEROKU_RELEASE_CREATED_AT,
         HEROKU_BUILD_COMMIT: process.env.HEROKU_BUILD_COMMIT,
         START_TIME: new Date().toISOString(),
